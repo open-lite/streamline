@@ -282,8 +282,8 @@
 //#undef  __cpp_lib_formatters
 //#define __cpp_lib_formatters 202302L
 
-//#undef  __cpp_lib_forward_like
-//#define __cpp_lib_forward_like 202207L
+#undef  __cpp_lib_forward_like
+#define __cpp_lib_forward_like 202207L
 
 //#undef  __cpp_lib_freestanding_algorithm
 //#define __cpp_lib_freestanding_algorithm 202502L

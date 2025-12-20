@@ -1,0 +1,68 @@
+#pragma once
+#include "streamline/metaprogramming/type_traits/compounded_categories.hpp"
+#include "streamline/numeric/int.hpp"
+
+
+
+//#include <compare>
+#include <initializer_list>
+
+
+#include "streamline/metaprogramming/forward.hpp"
+#include "streamline/metaprogramming/move.hpp"
+#include "streamline/containers/pair.hpp"
+namespace std {
+	using sl::forward;
+	using sl::forward_like;
+	using sl::move;
+	using sl::pair;
+}
+
+
+#include "streamline/metaprogramming/tuple_traits.hpp"
+#include "streamline/metaprogramming/integer_sequence.hpp"
+namespace std {
+	template<typename T>
+	struct tuple_size;
+
+	template<sl::traits::tuple_like T>
+	struct tuple_size<T> : sl::size_constant_type<sl::tuple_traits<T>::size> {};
+
+
+	template<size_t I, typename T>
+	struct tuple_element;
+
+	template<size_t I, sl::traits::tuple_like T>
+	struct tuple_element<I, T> : sl::type_identity<typename sl::tuple_traits<T>::template type_of_element<I>> {};
+}
+
+namespace std {
+	template<sl::traits::integral T, T... Is>
+	using integer_sequence = sl::integer_sequence_type<T, Is...>;
+	template<size_t... Is>
+	using index_sequence = sl::index_sequence_type<Is...>;
+
+	template<typename T, size_t N>
+	using make_integer_sequence = sl::integer_sequence_of_length_type<N, T>;
+	template<size_t N>
+	using make_index_sequence = sl::index_sequence_of_length_type<N>;
+
+	template<typename... Ts>
+	using index_sequence_for = sl::index_sequence_for_pack_type<Ts...>;
+}
+
+
+#include "streamline/metaprogramming/in_place.hpp"
+namespace std {
+	using in_place_t = sl::in_place_tag_type;
+	template<typename T>
+	using in_place_type_t = sl::in_place_type_type<T>;
+	template<size_t I>
+	using in_place_index_t = sl::in_place_index_type<I>;
+
+	inline constexpr in_place_t in_place{};
+	template<typename T>
+	constexpr in_place_type_t<T> in_place_type{};
+	template<size_t I>
+	constexpr in_place_index_t<I> in_place_index{};
+}
