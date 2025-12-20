@@ -82,6 +82,8 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"cstdlib"
 	"initializer_list"
 	"limits"
+	"stdexcept"
+	"string"
 	"tuple"
 	"type_traits"
 	"utility"
