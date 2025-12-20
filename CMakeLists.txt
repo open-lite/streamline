@@ -54,6 +54,11 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 
 	"numeric/int.hpp"
+
+
+	"universal/get.hpp"
+	"universal/make_deduced.hpp"
+	"universal/make.hpp"
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
