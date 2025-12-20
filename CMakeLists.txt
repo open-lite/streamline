@@ -17,6 +17,9 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"diagnostics/unreachable.hpp"
 
 
+	"functional/comparison.hpp"
+
+
 	"metaprogramming/impl/compounded_categories.hpp"
 	"metaprogramming/impl/isolated_categories.hpp"
 	"metaprogramming/impl/modifiers.hpp"
