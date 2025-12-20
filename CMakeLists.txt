@@ -22,6 +22,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 
 	"functional/comparison.hpp"
+	"functional/generic_stateless_functor.hpp"
 	"functional/identity_function.hpp"
 
 
