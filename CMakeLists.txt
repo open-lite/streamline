@@ -13,14 +13,33 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"diagnostics/terminate.hpp"
 	"diagnostics/unreachable.hpp"
 
+
+	"metaprogramming/impl/compounded_categories.hpp"
+	"metaprogramming/impl/isolated_categories.hpp"
+	"metaprogramming/impl/modifiers.hpp"
+	"metaprogramming/impl/relationships.hpp"
+
+	"metaprogramming/type_traits/compounded_categories.hpp"
+	"metaprogramming/type_traits/extensions.hpp"
+	"metaprogramming/type_traits/isolated_categories.hpp"
+	"metaprogramming/type_traits/relationships.hpp"
+	"metaprogramming/type_traits/supported_operations.hpp"
+
+	"metaprogramming/common_type.hpp"
+	"metaprogramming/conditional.hpp"
 	"metaprogramming/empty_t.hpp"
 	"metaprogramming/in_place.hpp"
+	"metaprogramming/integral_constant.hpp"
+	"metaprogramming/type_identity.hpp"
+	"metaprogramming/type_modifiers.hpp"
+
 
 	"numeric/int.hpp"
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
 	"version"
+	"type_traits"
 )
 
 set(${PROJECT_NAME}_SOURCE_FILES

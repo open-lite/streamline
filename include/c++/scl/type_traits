@@ -1,0 +1,159 @@
+#pragma once
+
+
+//base classes
+#include <streamline/metaprogramming/integral_constant.hpp>
+namespace std {
+	template<typename T, T V>
+	using integral_constant = sl::integral_constant_type<T, V>;
+	template<bool B>
+	using bool_constant     = sl::bool_constant_type<B>;
+	using true_type         = sl::true_constant_type;
+	using false_type        = sl::false_constant_type;
+}
+
+
+//urnary type traits
+#include <streamline/metaprogramming/type_traits/isolated_categories.hpp>
+#include <streamline/metaprogramming/type_traits/compounded_categories.hpp>
+#include <streamline/metaprogramming/type_traits/supported_operations.hpp>
+namespace std {
+	using namespace sl::traits;
+	
+	template<typename T> using is_enum = is_enumeration<T>;
+	template<typename T> constexpr bool is_enum_v = is_enumeration_v<T>;
+
+	
+	template<typename T> using is_signed = is_signed_arithmetic<T>;
+	template<typename T> constexpr bool is_signed_v = is_signed_arithmetic_v<T>;
+	
+	template<typename T> using is_unsigned = is_unsigned_arithmetic<T>;
+	template<typename T> constexpr bool is_unsigned_v = is_unsigned_arithmetic_v<T>;
+}
+
+
+//property queries
+
+namespace std {
+	template<class T>
+	struct alignment_of : sl::size_constant_type<alignof(T)> {};
+}
+
+
+//type relationships
+#include <streamline/metaprogramming/type_traits/relationships.hpp>
+namespace std {
+	using namespace sl::traits;
+
+	template<typename T, typename U> using is_same = is_same_as<T, U>;
+	template<typename T, typename U> constexpr bool is_same_v = is_same_as_v<T, U>;
+
+	
+	template<typename T, typename U> using is_convertible = is_convertible_to<T, U>;
+	template<typename T, typename U> constexpr bool is_convertible_v = is_convertible_to_v<T, U>;
+
+	template<typename T, typename U> using is_nothrow_convertible = is_noexcept_convertible_to<T, U>;
+	template<typename T, typename U> constexpr bool is_nothrow_convertible_v = is_noexcept_convertible_to_v<T, U>;
+}
+
+
+
+//type transformations
+#include <streamline/metaprogramming/type_modifiers.hpp>
+#include <streamline/metaprogramming/type_identity.hpp>
+#include <streamline/metaprogramming/conditional.hpp>
+#include <streamline/metaprogramming/common_type.hpp>
+namespace std {
+	//const-volatility specifiers
+	using sl::remove_const;
+	using sl::remove_volatile;
+	using sl::remove_cv;
+	using sl::add_const;
+	using sl::add_volatile;
+	using sl::add_cv;
+	
+	using sl::remove_const_t;
+	using sl::remove_volatile_t;
+	using sl::remove_cv_t;
+	using sl::add_const_t;
+	using sl::add_volatile_t;
+	using sl::add_cv_t;
+	
+
+
+	//references
+	using sl::remove_reference;
+	using sl::add_lvalue_reference;
+	using sl::add_rvalue_reference;
+
+	using sl::remove_reference_t;
+	using sl::add_lvalue_reference_t;
+	using sl::add_rvalue_reference_t;
+
+
+
+	//pointers
+	using sl::add_pointer;
+	using sl::remove_pointer;
+
+	using sl::add_pointer_t;
+	using sl::remove_pointer_t;
+
+
+
+	//other transformations
+	using sl::decay;
+	using sl::remove_cvref;
+	template<bool B, typename T = void> struct enable_if {};
+	template<typename T> struct enable_if<true, T> : sl::type_identity<T> {};
+	using sl::conditional;
+	using sl::common_type;
+	using sl::type_identity;
+
+
+	using sl::decay_t;
+	using sl::remove_cvref_t;
+	template<bool B, typename T = void> using enable_if_t = typename enable_if<B,T>::type;
+	using sl::conditional_t;
+	using sl::common_type_t;
+	using sl::type_identity_t;
+}
+
+
+
+//logical operations (std only)
+namespace std {
+	template<typename...>
+	struct conjunction : true_type {};
+ 
+	template<typename B0>
+	struct conjunction<B0> : B0 {};
+ 
+	template<typename B0, typename... Bn>
+	struct conjunction<B0, Bn...> : conditional_t<static_cast<bool>(B0::value), conjunction<Bn...>, B0> {};
+
+
+	template<typename...>
+	struct disjunction : false_type {};
+ 
+	template<typename B0>
+	struct disjunction<B0> : B0 {};
+ 
+	template<typename B0, typename... Bn>
+	struct disjunction<B0, Bn...> : conditional_t<static_cast<bool>(B0::value), B0, disjunction<Bn...>>  {};
+
+
+	template<typename B> 
+	struct negation : bool_constant<!static_cast<bool>(B::value)> {};
+
+
+
+	template<typename... B>
+	constexpr bool conjunction_v = conjunction<B...>::value;
+
+	template<typename... B>
+	constexpr bool disjunction_v = disjunction<B...>::value;
+
+	template<typename B>
+	constexpr bool negation_v = negation<B>::value;
+}

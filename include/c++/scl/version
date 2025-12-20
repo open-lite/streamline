@@ -87,11 +87,11 @@
 //#undef  __cpp_lib_bitset
 //#define __cpp_lib_bitset 202306L
 
-//#undef  __cpp_lib_bool_constant
-//#define __cpp_lib_bool_constant 201505L
+#undef  __cpp_lib_bool_constant
+#define __cpp_lib_bool_constant 201505L
 
-//#undef  __cpp_lib_bounded_array_traits
-//#define __cpp_lib_bounded_array_traits 201902L
+#undef  __cpp_lib_bounded_array_traits
+#define __cpp_lib_bounded_array_traits 201902L
 
 //#undef  __cpp_lib_boyer_moore_searcher
 //#define __cpp_lib_boyer_moore_searcher 201603L
@@ -453,8 +453,8 @@
 //#undef  __cpp_lib_integer_sequence
 //#define __cpp_lib_integer_sequence 201304L
 
-//#undef  __cpp_lib_integral_constant_callable
-//#define __cpp_lib_integral_constant_callable 201304L
+#undef  __cpp_lib_integral_constant_callable
+#define __cpp_lib_integral_constant_callable 201304L
 
 //#undef  __cpp_lib_interpolate
 //#define __cpp_lib_interpolate 201902L
@@ -486,8 +486,8 @@
 //#undef  __cpp_lib_is_layout_compatible
 //#define __cpp_lib_is_layout_compatible 201907L
 
-//#undef  __cpp_lib_is_nothrow_convertible
-//#define __cpp_lib_is_nothrow_convertible 201806L
+#undef  __cpp_lib_is_nothrow_convertible
+#define __cpp_lib_is_nothrow_convertible 201806L
 
 //#undef  __cpp_lib_is_null_pointer
 //#define __cpp_lib_is_null_pointer 201309L
@@ -684,8 +684,8 @@
 //#undef  __cpp_lib_reference_wrapper
 //#define __cpp_lib_reference_wrapper 202403L
 
-//#undef  __cpp_lib_remove_cvref
-//#define __cpp_lib_remove_cvref 201711L
+#undef  __cpp_lib_remove_cvref
+#define __cpp_lib_remove_cvref 201711L
 
 //#undef  __cpp_lib_result_of_sfinae
 //#define __cpp_lib_result_of_sfinae 201210L
@@ -822,8 +822,8 @@
 //#undef  __cpp_lib_tuples_by_type
 //#define __cpp_lib_tuples_by_type 201304L
 
-//#undef  __cpp_lib_type_identity
-//#define __cpp_lib_type_identity 201806L
+#undef  __cpp_lib_type_identity
+#define __cpp_lib_type_identity 201806L
 
 //#undef  __cpp_lib_type_trait_variable_templates
 //#define __cpp_lib_type_trait_variable_templates 201510L
