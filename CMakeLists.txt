@@ -9,7 +9,9 @@ option(BUILD_SHARED_LIBS "" ON)
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
 	"diagnostics/result.hpp"
-	
+
+	"metaprogramming/empty_t.hpp"
+
 	"numeric/int.hpp"
 )
 
