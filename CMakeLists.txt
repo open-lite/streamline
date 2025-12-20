@@ -30,6 +30,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/type_traits/isolated_categories.hpp"
 	"metaprogramming/type_traits/relationships.hpp"
 	"metaprogramming/type_traits/supported_operations.hpp"
+	"metaprogramming/type_traits/type_of_pack_element.hpp"
 
 	"metaprogramming/common_type.hpp"
 	"metaprogramming/conditional.hpp"
