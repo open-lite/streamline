@@ -1,0 +1,8 @@
+#pragma once
+#include "streamline/containers/tuple.hpp"
+
+namespace std {
+	using sl::tuple;
+
+	using sl::get;
+}

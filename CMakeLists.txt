@@ -11,8 +11,11 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"algorithm/minmax.hpp"
 
 
+	"containers/impl/tuple.hpp"
+
 	"containers/initializer_list.hpp"
 	"containers/initializer_list.inl"
+	"containers/tuple.hpp"
 
 
 	"diagnostics/abort.hpp"
@@ -68,6 +71,8 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
 	"initializer_list"
+	"limits"
+	"tuple"
 	"type_traits"
 	"utility"
 	"version"
