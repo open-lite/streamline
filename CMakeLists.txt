@@ -26,6 +26,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/lookup_table.fwd.hpp"
 	"containers/lookup_table.hpp"
 	"containers/lookup_table.inl"
+	"containers/pair.hpp"
 	"containers/tuple.hpp"
 
 
