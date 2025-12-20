@@ -131,21 +131,12 @@ namespace sl {
 
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	struct tuple_traits<lookup_table<N, Key, Value, Hash, KeyEqual>> {
-		constexpr static size_t size = lookup_table<N, Key, Value, Hash, KeyEqual>::size();
-		constexpr static size_t size_bytes = lookup_table<N, Key, Value, Hash, KeyEqual>::size_bytes();
-		constexpr static bool homogeneous = true;
-		constexpr static bool unique = false;
+	struct container_traits<lookup_table<N, Key, Value, Hash, KeyEqual>> : 
+		container_traits<typename lookup_table<N, Key, Value, Hash, KeyEqual>::container_type> {};
 
-		using common_type = typename lookup_table<N, Key, Value, Hash, KeyEqual>::value_type;
-		
-
-		template<size_t I>
-		using type_of_element = common_type;
-
-		template<typename U>
-		using indices_of_type = index_sequence_of_length_type<traits::is_same_as_v<common_type, U> ? size : 0>;
-	};
+	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
+	struct tuple_traits<lookup_table<N, Key, Value, Hash, KeyEqual>> : 
+		tuple_traits<typename lookup_table<N, Key, Value, Hash, KeyEqual>::container_type> {};
 }
 
 
