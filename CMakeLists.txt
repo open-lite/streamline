@@ -39,6 +39,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/in_place.hpp"
 	"metaprogramming/integer_sequence.hpp"
 	"metaprogramming/integral_constant.hpp"
+	"metaprogramming/pack_indices_of_type.hpp"
 	"metaprogramming/tuple_traits.fwd.hpp"
 	"metaprogramming/tuple_traits.hpp"
 	"metaprogramming/type_identity.hpp"
