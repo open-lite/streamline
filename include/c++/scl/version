@@ -564,8 +564,8 @@
 //#undef  __cpp_lib_node_extract
 //#define __cpp_lib_node_extract 201606L
 
-//#undef  __cpp_lib_nonmember_container_access
-//#define __cpp_lib_nonmember_container_access 201411L
+#undef  __cpp_lib_nonmember_container_access
+#define __cpp_lib_nonmember_container_access 201411L
 
 //#undef  __cpp_lib_not_fn
 //#define __cpp_lib_not_fn 202306L

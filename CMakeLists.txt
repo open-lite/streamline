@@ -11,6 +11,10 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"algorithm/minmax.hpp"
 
 
+	"containers/initializer_list.hpp"
+	"containers/initializer_list.inl"
+
+
 	"diagnostics/abort.hpp"
 	"diagnostics/result.hpp"
 	"diagnostics/terminate.hpp"
@@ -53,8 +57,10 @@ set(${PROJECT_NAME}_HEADER_FILES
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
-	"version"
+	"initializer_list"
 	"type_traits"
+	"utility"
+	"version"
 )
 
 set(${PROJECT_NAME}_SOURCE_FILES
