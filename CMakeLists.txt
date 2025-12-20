@@ -22,6 +22,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 
 	"functional/comparison.hpp"
+	"functional/identity_function.hpp"
 
 
 	"metaprogramming/impl/compounded_categories.hpp"
@@ -53,7 +54,10 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/type_of_pack_element.hpp"
 
 
+	"numeric/impl/numeric_traits_base.hpp"
+
 	"numeric/int.hpp"
+	"numeric/numeric_traits.hpp"
 
 
 	"universal/get.hpp"
