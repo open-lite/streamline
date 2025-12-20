@@ -8,7 +8,10 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
+	"diagnostics/abort.hpp"
 	"diagnostics/result.hpp"
+	"diagnostics/terminate.hpp"
+	"diagnostics/unreachable.hpp"
 
 	"metaprogramming/empty_t.hpp"
 

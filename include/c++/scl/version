@@ -834,8 +834,8 @@
 //#undef  __cpp_lib_unordered_map_try_emplace
 //#define __cpp_lib_unordered_map_try_emplace 201411L
 
-//#undef  __cpp_lib_unreachable
-//#define __cpp_lib_unreachable 202202L
+#undef  __cpp_lib_unreachable
+#define __cpp_lib_unreachable 202202L
 
 //#undef  __cpp_lib_unwrap_ref
 //#define __cpp_lib_unwrap_ref 201811L
