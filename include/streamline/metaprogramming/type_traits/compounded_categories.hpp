@@ -1,9 +1,7 @@
 #pragma once
 #include "streamline/metaprogramming/integral_constant.hpp"
-#include "streamline/metaprogramming/type_traits/extensions.hpp"
 #include "streamline/metaprogramming/type_traits/isolated_categories.hpp"
 #include "streamline/metaprogramming/type_traits/relationships.hpp"
-#include "streamline/metaprogramming/type_traits/logical_operations.hpp"
 #include "streamline/metaprogramming/tuple_traits.fwd.hpp"
 #include "streamline/metaprogramming/container_traits.fwd.hpp"
 
