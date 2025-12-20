@@ -8,6 +8,9 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
+	"algorithm/minmax.hpp"
+
+
 	"diagnostics/abort.hpp"
 	"diagnostics/result.hpp"
 	"diagnostics/terminate.hpp"
