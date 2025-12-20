@@ -8,7 +8,7 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
-	""
+	"numeric/int.hpp"
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES

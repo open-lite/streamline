@@ -96,8 +96,8 @@
 //#undef  __cpp_lib_boyer_moore_searcher
 //#define __cpp_lib_boyer_moore_searcher 201603L
 
-//#undef  __cpp_lib_byte
-//#define __cpp_lib_byte 201603L
+#undef  __cpp_lib_byte
+#define __cpp_lib_byte 201603L
 
 //#undef  __cpp_lib_byteswap
 //#define __cpp_lib_byteswap 202110L
