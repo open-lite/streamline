@@ -27,8 +27,8 @@
 //#undef  __cpp_lib_apply
 //#define __cpp_lib_apply 201603L
 
-//#undef  __cpp_lib_array_constexpr
-//#define __cpp_lib_array_constexpr 201811L
+#undef  __cpp_lib_array_constexpr
+#define __cpp_lib_array_constexpr 201811L
 
 //#undef  __cpp_lib_as_const
 //#define __cpp_lib_as_const 201510L
@@ -288,8 +288,8 @@
 //#undef  __cpp_lib_freestanding_algorithm
 //#define __cpp_lib_freestanding_algorithm 202502L
 
-//#undef  __cpp_lib_freestanding_array
-//#define __cpp_lib_freestanding_array 202311L
+#undef  __cpp_lib_freestanding_array
+#define __cpp_lib_freestanding_array 202311L
 
 //#undef  __cpp_lib_freestanding_char_traits
 //#define __cpp_lib_freestanding_char_traits 202306L
@@ -792,8 +792,8 @@
 //#undef  __cpp_lib_to_address
 //#define __cpp_lib_to_address 201711L
 
-//#undef  __cpp_lib_to_array
-//#define __cpp_lib_to_array 201907L
+#undef  __cpp_lib_to_array
+#define __cpp_lib_to_array 201907L
 
 //#undef  __cpp_lib_to_chars
 //#define __cpp_lib_to_chars 202306L

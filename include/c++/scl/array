@@ -1,0 +1,21 @@
+#pragma once
+
+#include "streamline/containers/array.hpp"
+namespace std {
+	template<typename T, size_t N>
+	using array = sl::array<N, T>;
+}
+
+
+#include "streamline/universal/make.hpp"
+namespace std {
+	template<typename T, size_t N>
+	constexpr std::array<sl::remove_cv_t<T>, N> to_array(T (&a)[N] ) {
+		return sl::universal::make_deduced<sl::generic_array>(a);
+	}
+
+	template<typename T, size_t N>
+	constexpr std::array<sl::remove_cv_t<T>, N> to_array(T (&&a)[N] ) {
+		return sl::universal::make_deduced<sl::generic_array>(sl::move(a));
+	}
+}

@@ -11,8 +11,13 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"algorithm/minmax.hpp"
 
 
+	"containers/impl/array_data.hpp"
+	"containers/impl/make_array.hpp"
 	"containers/impl/tuple.hpp"
 
+	"containers/array.fwd.hpp"
+	"containers/array.hpp"
+	"containers/array.inl"
 	"containers/initializer_list.hpp"
 	"containers/initializer_list.inl"
 	"containers/tuple.hpp"
@@ -70,6 +75,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
+	"array"
 	"initializer_list"
 	"limits"
 	"tuple"
