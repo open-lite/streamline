@@ -102,8 +102,8 @@
 //#undef  __cpp_lib_byteswap
 //#define __cpp_lib_byteswap 202110L
 
-//#undef  __cpp_lib_char
-//#define __cpp_lib_char 201907L
+#undef  __cpp_lib_char8_t
+#define __cpp_lib_char8_t 201907L
 
 //#undef  __cpp_lib_chrono
 //#define __cpp_lib_chrono 202306L
