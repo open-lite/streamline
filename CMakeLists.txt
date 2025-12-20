@@ -76,6 +76,10 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
 	"array"
+	"cassert"
+	"cstddef"
+	"cstdint"
+	"cstdlib"
 	"initializer_list"
 	"limits"
 	"tuple"

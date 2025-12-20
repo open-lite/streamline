@@ -1,0 +1,6 @@
+#pragma once
+#include "streamline/diagnostics/abort.hpp"
+
+namespace std {
+	using ::sl::abort;
+}
