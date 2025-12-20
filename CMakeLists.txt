@@ -8,6 +8,8 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
+	"diagnostics/result.hpp"
+	
 	"numeric/int.hpp"
 )
 
