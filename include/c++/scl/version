@@ -813,11 +813,11 @@
 //#undef  __cpp_lib_trivially_relocatable
 //#define __cpp_lib_trivially_relocatable 202502L
 
-//#undef  __cpp_lib_tuple_element_t
-//#define __cpp_lib_tuple_element_t 201402L
+#undef  __cpp_lib_tuple_element_t
+#define __cpp_lib_tuple_element_t 201402L
 
-//#undef  __cpp_lib_tuple_like
-//#define __cpp_lib_tuple_like 202311L
+#undef  __cpp_lib_tuple_like
+#define __cpp_lib_tuple_like 202311L
 
 //#undef  __cpp_lib_tuples_by_type
 //#define __cpp_lib_tuples_by_type 201304L

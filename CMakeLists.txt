@@ -30,15 +30,20 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/type_traits/isolated_categories.hpp"
 	"metaprogramming/type_traits/relationships.hpp"
 	"metaprogramming/type_traits/supported_operations.hpp"
-	"metaprogramming/type_traits/type_of_pack_element.hpp"
 
 	"metaprogramming/common_type.hpp"
 	"metaprogramming/conditional.hpp"
+	"metaprogramming/container_traits.fwd.hpp"
+	"metaprogramming/container_traits.hpp"
 	"metaprogramming/empty_t.hpp"
 	"metaprogramming/in_place.hpp"
+	"metaprogramming/integer_sequence.hpp"
 	"metaprogramming/integral_constant.hpp"
+	"metaprogramming/tuple_traits.fwd.hpp"
+	"metaprogramming/tuple_traits.hpp"
 	"metaprogramming/type_identity.hpp"
 	"metaprogramming/type_modifiers.hpp"
+	"metaprogramming/type_of_pack_element.hpp"
 
 
 	"numeric/int.hpp"
