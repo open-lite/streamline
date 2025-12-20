@@ -8,11 +8,14 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
+	"algorithm/lookup_table_hash.hpp"
 	"algorithm/minmax.hpp"
 
 
 	"containers/impl/array_data.hpp"
+	"containers/impl/hash_table.hpp"
 	"containers/impl/make_array.hpp"
+	"containers/impl/seed_or_index.hpp"
 	"containers/impl/tuple.hpp"
 
 	"containers/array.fwd.hpp"
@@ -20,6 +23,9 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/array.inl"
 	"containers/initializer_list.hpp"
 	"containers/initializer_list.inl"
+	"containers/lookup_table.fwd.hpp"
+	"containers/lookup_table.hpp"
+	"containers/lookup_table.inl"
 	"containers/tuple.hpp"
 
 
