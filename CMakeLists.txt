@@ -14,6 +14,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"diagnostics/unreachable.hpp"
 
 	"metaprogramming/empty_t.hpp"
+	"metaprogramming/in_place.hpp"
 
 	"numeric/int.hpp"
 )
