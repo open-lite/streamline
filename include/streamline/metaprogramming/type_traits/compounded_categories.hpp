@@ -49,6 +49,8 @@ namespace sl::traits {
 		typename tuple_traits<T>::template type_of_element<0>;
 		typename tuple_traits<T>::template indices_of_type<void>;
 	}> {};
+
+	template<typename T> struct is_pair_like : bool_constant_type<is_tuple_like<T>::value && requires { requires tuple_traits<T>::size == 2; }> {};
 	
 	template<typename T> struct is_array_like : bool_constant_type<is_span_like<T>::value && is_tuple_like<T>::value> {};
 }
@@ -83,6 +85,9 @@ namespace sl::traits {
 	constexpr static bool is_tuple_like_v = is_tuple_like<T>::value;
 
 	template<typename T>
+	constexpr static bool is_pair_like_v = is_pair_like<T>::value;
+
+	template<typename T>
 	constexpr static bool is_array_like_v = is_array_like<T>::value;
 }
 
@@ -112,6 +117,9 @@ namespace sl::traits {
 
 	template<typename T>
 	concept tuple_like = is_tuple_like_v<T>;
+
+	template<typename T>
+	concept pair_like = is_pair_like_v<T>;
 
 	template<typename T>
 	concept array_like = is_array_like_v<T>;

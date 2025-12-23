@@ -43,7 +43,7 @@ namespace sl::impl {
 				_seed = prg();
 				bool rejected = false;
 				for (index_t i = 0; i < container_type::size(); ++i) {
-					auto& bucket = buckets[hash(contents[i].first, _seed) % storage_size];
+					auto& bucket = buckets[hash(contents[i][first_constant], _seed) % storage_size];
 					if (bucket.size() >= bucket_size) {
 						rejected = true;
 						break;
@@ -57,7 +57,7 @@ namespace sl::impl {
 			#ifndef NDEBUG
 			for(bucket_type const& bucket : buckets)
 				for(std::size_t i = 1; i < bucket.size(); ++i)
-					constexpr_assert(!key_equal(contents[0].first, contents[i].first), "unique keys");
+					constexpr_assert(!key_equal(contents[0][first_constant], contents[i][first_constant]), "unique keys");
 			#endif
 
 			frozen::bits::quicksort(bucket_refs.begin(), bucket_refs.end() - 1, frozen::bits::bucket_size_compare{});
@@ -75,7 +75,7 @@ namespace sl::impl {
 					frozen::bits::cvector<index_t, bucket_size> bucket_slots;
 
 					while (bucket_slots.size() < bsize) {
-						auto slot = hash(contents[bucket_ref[bucket_slots.size()]].first, static_cast<index_t>(d.value)) % storage_size;
+						auto slot = hash(contents[bucket_ref[bucket_slots.size()]][first_constant], static_cast<index_t>(d.value)) % storage_size;
 
 						if (_idx_table[slot] != container_type::size() || !frozen::bits::all_different_from(bucket_slots, slot)) {
 							bucket_slots.clear();

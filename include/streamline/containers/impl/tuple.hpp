@@ -23,15 +23,3 @@ namespace sl::impl {
 		//constexpr T const&& operator[](index_constant_type<I>) const&& noexcept { return move(static_cast<tuple_element*>(this)->value); }
 	};
 }
-
-
-namespace sl::impl {
-	template<size_t, typename, typename... Ts>
-	struct tuple;
-
-
-	template<size_t _UnusedN, index_t... Is, typename... Ts>
-	struct tuple<_UnusedN, index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
-		using impl::tuple_element<Is, Ts>::operator[]...;
-	};
-}

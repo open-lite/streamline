@@ -124,14 +124,6 @@ namespace sl {
 	requires (traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
 	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
 
-
-	template<traits::specialization_of<generic_array> R, typename T, size_t N, typename XfrmFn = identity_functor>
-	constexpr remove_cvref_t<R> make(T (&a)[N], XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
-
-	template<traits::specialization_of<generic_array> R, typename T, size_t N, typename XfrmFn = identity_functor>
-	constexpr remove_cvref_t<R> make(T (&&a)[N], XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
-
-
 	template<traits::specialization_of<generic_array> R, typename Arg, size_t N = tuple_traits<R>::size, typename XfrmFn = identity_functor>
 	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn = identity_functor{}) noexcept;
 }
@@ -145,17 +137,7 @@ namespace sl {
 	)
 	constexpr array<tuple_traits<RawArg>::size, typename tuple_traits<RawArg>::common_type> 
 	make_deduced(Arg&& array_ish, XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
-
-
-	template<template<size_t, typename...> typename R, typename T, size_t N, typename XfrmFn = identity_functor>
-	requires traits::same_container_as<R, generic_array, N, T>
-	constexpr array<N, T> make_deduced(T (&a)[N], XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
-
-	template<template<size_t, typename...> typename R, typename T, size_t N, typename XfrmFn = identity_functor>
-	requires traits::same_container_as<R, generic_array, N, T>
-	constexpr array<N, T> make_deduced(T (&&a)[N], XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
 	
-
 	template<template<size_t, typename...> typename R, typename Arg, size_t N, typename XfrmFn = identity_functor>
 	requires traits::same_container_as<R, generic_array, N, remove_cvref_t<Arg>>
 	constexpr array<N, remove_cvref_t<Arg>> make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn = identity_functor{}) noexcept;
@@ -190,10 +172,32 @@ constexpr bool z = sl::traits::is_tuple_like_v<x>;
 constexpr auto t = x{1, 2};
 constexpr auto w2 = sl::get<0>(t);
 constexpr auto w3 = sl::get<0>(const_cast<x&>(t));
-constexpr auto w1 = sl::get<0>(x{{{1}, {2}}});
+constexpr auto w1 = sl::get<0>(x{{1}, {2}});
 constexpr auto w4 = sl::get<0>(move(t));
 //constexpr bool y = requires { typename x::common_type; };
 //using z = typename x::common_type;
+
+namespace sl::test {
+	struct immoble{
+		int value;
+
+		constexpr immoble() noexcept = default;
+		constexpr immoble(int v) noexcept : value(v) {};
+		constexpr immoble(immoble const&) noexcept = delete;
+		constexpr immoble(immoble&&) noexcept = delete;
+		constexpr ~immoble() = default;
+	};
+
+	struct move_only{
+		int value;
+
+		constexpr move_only() noexcept = default;
+		constexpr move_only(int v) noexcept : value(v) {};
+		constexpr move_only(move_only const&) noexcept = delete;
+		constexpr move_only(move_only&&) noexcept = default;
+		constexpr ~move_only() = default;
+	};
+}
 
 constexpr int func() noexcept {
 	sl::array<3, int> arr{1, 2, 3};
@@ -226,6 +230,13 @@ constexpr int func() noexcept {
 	//constexpr auto x = carr.end();
 	//auto y = move(arr).end();
 	//constexpr auto z = move(carr).end();
+
+	{
+	constexpr auto immoble_arr = sl::make_deduced<sl::array>(sl::test::move_only(5), sl::in_place_repeat_tag<5>);
+	constexpr auto sz = immoble_arr.size();
+	//constexpr auto arr1 = sl::move(immoble_arr[0]);
+	//constexpr auto arr2 = sl::move(immoble_arr[1]);
+	}
 
 	{
 	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{1, 2});

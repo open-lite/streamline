@@ -90,6 +90,8 @@ namespace sl {
 		template<typename K> constexpr auto try_at(this auto&& self, K&& key) noexcept requires compatible_key<K>;
 		template<typename K> constexpr auto&& operator[](this auto&& self, K&& key) noexcept requires compatible_key<K>;
 
+		template<auto I> constexpr auto&& get(this auto&& self) noexcept requires compatible_key<decltype(I)>;
+
 		template<typename K> constexpr size_t count(K&& key) const noexcept requires compatible_key<K>;
 		template<typename K> constexpr auto find(this auto&& self, K&& key) noexcept requires compatible_key<K>;
 		template<typename K> constexpr bool contains(K&& key) const noexcept requires compatible_key<K>;
@@ -159,11 +161,12 @@ namespace sl::test {
 
 
 	using oof = lookup_table<4, sl::uint64_t, array<2, empty_t>>;
+	static_assert(traits::is_tuple_like_v<oof>);
 	constexpr typename oof::container_type yikes{{
-			{0, array<2, empty_t>{}},
-			{1, array<2, empty_t>{}},
-			{2, array<2, empty_t>{}},
-			{3, array<2, empty_t>{}}
+		{0, array<2, empty_t>{}},
+		{1, array<2, empty_t>{}},
+		{2, array<2, empty_t>{}},
+		{3, array<2, empty_t>{}}
 	}};
 	
 	//constexpr impl::hash_table<oof::bucket_count(), typename oof::container_type> dab = sl::impl::make<impl::hash_table<oof::bucket_count(), typename oof::container_type>>(
@@ -181,17 +184,11 @@ namespace sl::test {
 	static_assert(yeet[1124135][0] == 3 && yeet[1124135][1] == 4);
 	static_assert(yeet[212351][0] == 5 && yeet[212351][1] == 6);
 	static_assert(yeet[1259139578][0] == 7 && yeet[1259139578][1] == 8);
+	static_assert(sl::get<1124135>(yeet)[0] == 3);
 
 
 	
-	struct immoble{
-		int value;
 
-		constexpr immoble() noexcept = default;
-		constexpr immoble(int v) noexcept : value(v) {};
-		constexpr immoble(immoble const&) noexcept = delete;
-		constexpr immoble(immoble&&) noexcept = delete;
-	};
 	constexpr lookup_table<4, sl::uint64_t, immoble> doh{{{
 		{0, immoble{1}},
 		{1124135, immoble{3}},
@@ -204,7 +201,7 @@ namespace sl::test {
 	static_assert(doh[static_cast<uint64_t>(1259139578135)].value == 7);
 
 
-	constexpr array<4, pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<array>(
+	constexpr array<4, pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic_array>(
 		array<4, pair<const sl::uint64_t, array<2, empty_t>>>{{
 			{0, array<2, empty_t>{}},
 			{1, array<2, empty_t>{}},

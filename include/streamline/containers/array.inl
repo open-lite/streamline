@@ -168,19 +168,6 @@ namespace sl {
 	}
 
 
-	template<traits::specialization_of<generic_array> R, typename T, size_t N, typename XfrmFn>
-	constexpr remove_cvref_t<R> make(T (&a)[N], XfrmFn&& xfrm_each_fn, in_place_adl_tag_type<R>) noexcept {
-		constexpr size_t size = algo::min(tuple_traits<R>::size, N);
-		return impl::make_array_from_container<R>(a, forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
-	}
-
-	template<traits::specialization_of<generic_array> R, typename T, size_t N, typename XfrmFn>
-	constexpr remove_cvref_t<R> make(T (&&a)[N], XfrmFn&& xfrm_each_fn, in_place_adl_tag_type<R>) noexcept {
-		constexpr size_t size = algo::min(tuple_traits<R>::size, N);
-		return impl::make_array_from_container<R>(move(a), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
-	}
-
-
 	template<traits::specialization_of<generic_array> R, typename Arg, size_t N, typename XfrmFn>
 	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn) noexcept {
 		constexpr size_t size = algo::min(tuple_traits<R>::size, N);
@@ -199,21 +186,6 @@ namespace sl {
 	make_deduced(Arg&& array_ish, XfrmFn&& xfrm_each_fn, in_place_container_adl_tag_type<R>) noexcept {
 		constexpr size_t size = tuple_traits<RawArg>::size;
 		return impl::make_array_from_container<array<size, typename tuple_traits<RawArg>::common_type>>(forward<Arg>(array_ish), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
-	}
-
-
-	template<template<size_t, typename...> typename R, typename T, size_t N, typename XfrmFn>
-	requires traits::same_container_as<R, generic_array, N, T>
-	constexpr array<N, T> make_deduced(T (&a)[N], XfrmFn&& xfrm_each_fn, in_place_container_adl_tag_type<R>) noexcept {
-		constexpr size_t size = N;
-		return impl::make_array_from_container<array<N, T>>(a, forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
-	}
-
-	template<template<size_t, typename...> typename R, typename T, size_t N, typename XfrmFn>
-	requires traits::same_container_as<R, generic_array, N, T>
-	constexpr array<N, T> make_deduced(T (&&a)[N], XfrmFn&& xfrm_each_fn, in_place_container_adl_tag_type<R>) noexcept {
-		constexpr size_t size = N;
-		return impl::make_array_from_container<array<N, T>>(move(a), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
 	}
 
 

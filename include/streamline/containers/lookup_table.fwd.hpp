@@ -5,7 +5,7 @@
 
 
 namespace sl {
-	template <size_t N, typename Key, typename Value, typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = equal_functor, typename...>
+	template <size_t N, typename...>
 	struct generic_lookup_table;
 }
 

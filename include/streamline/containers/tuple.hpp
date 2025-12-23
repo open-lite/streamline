@@ -10,13 +10,18 @@
 #include "streamline/containers/impl/tuple.hpp"
 
 namespace sl {
-	template<size_t _UnusedN, typename... Ts>
-	struct generic_tuple : impl::tuple<_UnusedN, index_sequence_for_pack_type<Ts...>, Ts...> {};
+	template<size_t, typename...>
+	struct generic_tuple;
+
+	template<size_t _UnusedN, index_t... Is, typename... Ts>
+	struct generic_tuple<_UnusedN, index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
+		using impl::tuple_element<Is, Ts>::operator[]...;
+	};
 }
 
 namespace sl {
 	template<typename... Ts>
-	using tuple = generic_tuple<sizeof...(Ts), Ts...>;
+	using tuple = generic_tuple<sizeof...(Ts), index_sequence_for_pack_type<Ts...>, Ts...>;
 }
 
 

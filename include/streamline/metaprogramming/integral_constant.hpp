@@ -50,6 +50,9 @@ namespace sl {
 }
 
 namespace sl {
+	constexpr index_constant_type<0> first_constant{};
+	constexpr index_constant_type<1> second_constant{};
+	
 	constexpr true_constant_type true_constant{};
 	constexpr false_constant_type false_constant{};
 }

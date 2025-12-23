@@ -46,7 +46,15 @@ namespace sl {
 	template<typename K> 
 	constexpr auto&& generic_lookup_table<N, Key, Value, Hash, KeyEqual>::operator[](this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		auto it = self.find(forward<K>(key));
-		return forward_like<decltype(self)>(it->second);
+		return forward_like<decltype(self)>(it->operator[](second_constant));
+	}
+
+
+
+	template<size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
+	template<auto I>
+	constexpr auto&& generic_lookup_table<N, Key, Value, Hash, KeyEqual>::get(this auto&& self) noexcept requires compatible_key<decltype(I)> {
+		return forward_like<decltype(self)>(self.operator[](I));
 	}
 }
 
@@ -64,7 +72,7 @@ namespace sl {
 		const index_t pos = self.lookup(key);
 		auto it = forward_as_lvalue<decltype(self)>(self).begin() + pos;
 
-		if (it != forward_as_lvalue<decltype(self)>(self).end() && self._key_equal(it->first, forward<K>(key))) return it;
+		if (it != forward_as_lvalue<decltype(self)>(self).end() && self._key_equal(it->operator[](first_constant), forward<K>(key))) return it;
 		return forward_as_lvalue<decltype(self)>(self).end();
 	}
 
