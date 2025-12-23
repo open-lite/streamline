@@ -56,6 +56,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/conditional.hpp"
 	"metaprogramming/container_traits.fwd.hpp"
 	"metaprogramming/container_traits.hpp"
+	"metaprogramming/declval.hpp"
 	"metaprogramming/empty_t.hpp"
 	"metaprogramming/forward.hpp"
 	"metaprogramming/in_place.hpp"

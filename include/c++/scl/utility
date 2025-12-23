@@ -10,11 +10,13 @@
 
 #include "streamline/metaprogramming/forward.hpp"
 #include "streamline/metaprogramming/move.hpp"
+#include "streamline/metaprogramming/declval.hpp"
 #include "streamline/containers/pair.hpp"
 namespace std {
 	using sl::forward;
 	using sl::forward_like;
 	using sl::move;
+	using sl::declval;
 	using sl::pair;
 }
 
