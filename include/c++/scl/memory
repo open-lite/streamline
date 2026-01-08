@@ -1,0 +1,8 @@
+
+
+//Explicit lifetime management
+#include "streamline/memory/start_lifetime_as.hpp"
+namespace std {
+	using sl::start_lifetime_as;
+	using sl::start_lifetime_as_array;
+}

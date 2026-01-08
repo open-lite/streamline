@@ -180,8 +180,8 @@
 //#undef  __cpp_lib_constexpr_memory
 //#define __cpp_lib_constexpr_memory 202202L
 
-//#undef  __cpp_lib_constexpr_new
-//#define __cpp_lib_constexpr_new 202406L
+#undef  __cpp_lib_constexpr_new
+#define __cpp_lib_constexpr_new 202406L
 
 //#undef  __cpp_lib_constexpr_numeric
 //#define __cpp_lib_constexpr_numeric 201911L
@@ -237,8 +237,8 @@
 //#undef  __cpp_lib_debugging
 //#define __cpp_lib_debugging 202403L
 
-//#undef  __cpp_lib_destroying_delete
-//#define __cpp_lib_destroying_delete 201806L
+#undef  __cpp_lib_destroying_delete
+#define __cpp_lib_destroying_delete 201806L
 
 //#undef  __cpp_lib_enable_shared_from_this
 //#define __cpp_lib_enable_shared_from_this 201603L
@@ -333,8 +333,8 @@
 //#undef  __cpp_lib_freestanding_numeric
 //#define __cpp_lib_freestanding_numeric 202502L
 
-//#undef  __cpp_lib_freestanding_operator_new
-//#define __cpp_lib_freestanding_operator_new 202306L
+#undef  __cpp_lib_freestanding_operator_new
+#define __cpp_lib_freestanding_operator_new 202306L
 
 //#undef  __cpp_lib_freestanding_optional
 //#define __cpp_lib_freestanding_optional 202311L
@@ -420,8 +420,8 @@
 //#undef  __cpp_lib_hardened_vector
 //#define __cpp_lib_hardened_vector 202502L
 
-//#undef  __cpp_lib_hardware_interference_size
-//#define __cpp_lib_hardware_interference_size 201703L
+#undef  __cpp_lib_hardware_interference_size
+#define __cpp_lib_hardware_interference_size 201703L
 
 //#undef  __cpp_lib_hive
 //#define __cpp_lib_hive 202502L
@@ -477,8 +477,8 @@
 //#undef  __cpp_lib_is_final
 //#define __cpp_lib_is_final 201402L
 
-//#undef  __cpp_lib_is_implicit_lifetime
-//#define __cpp_lib_is_implicit_lifetime 202302L
+#undef  __cpp_lib_is_implicit_lifetime
+#define __cpp_lib_is_implicit_lifetime 202302L
 
 //#undef  __cpp_lib_is_invocable
 //#define __cpp_lib_is_invocable 201703L
@@ -516,8 +516,8 @@
 //#undef  __cpp_lib_latch
 //#define __cpp_lib_latch 201907L
 
-//#undef  __cpp_lib_launder
-//#define __cpp_lib_launder 201606L
+#undef  __cpp_lib_launder
+#define __cpp_lib_launder 201606L
 
 //#undef  __cpp_lib_linalg
 //#define __cpp_lib_linalg 202311L
@@ -756,8 +756,8 @@
 //#undef  __cpp_lib_stacktrace
 //#define __cpp_lib_stacktrace 202011L
 
-//#undef  __cpp_lib_start_lifetime_as
-//#define __cpp_lib_start_lifetime_as 202207L
+#undef  __cpp_lib_start_lifetime_as
+#define __cpp_lib_start_lifetime_as 202207L
 
 //#undef  __cpp_lib_starts_ends_with
 //#define __cpp_lib_starts_ends_with 201711L

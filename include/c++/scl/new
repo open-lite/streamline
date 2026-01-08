@@ -1,0 +1,44 @@
+#pragma once
+
+//Classes
+#include "streamline/memory/align_value.hpp"
+namespace std {
+	struct bad_alloc {};
+	struct bad_array_new_length {};
+	using align_val_t = sl::align_value;
+}
+
+//Types
+#include "streamline/memory/new_handler.hpp"
+namespace std {
+	using new_handler = sl::new_handler_type;
+}
+
+//Tags
+#include "streamline/metaprogramming/in_place.hpp"
+#include "streamline/memory/delete.hpp"
+namespace std {
+	using nothrow_t = sl::in_place_tag_type;
+	inline constexpr nothrow_t nothrow = sl::in_place_tag;
+
+	using destroying_delete_t = sl::destroying_delete_tag_type;
+	inline constexpr destroying_delete_t destroying_delete = sl::destroying_delete_tag;
+}
+
+//Constants
+#include "streamline/numeric/int.hpp"
+namespace std {
+	inline constexpr sl::size_t hardware_destructive_interference_size = __GCC_DESTRUCTIVE_SIZE;
+	inline constexpr sl::size_t hardware_constructive_interference_size = __GCC_CONSTRUCTIVE_SIZE;
+}
+
+//Functions
+#include "streamline/memory/new.hpp"
+#include "streamline/memory/delete.hpp"
+#include "streamline/memory/new_handler.hpp"
+#include "streamline/memory/launder.hpp"
+namespace std {
+	using sl::get_new_handler;
+	using sl::set_new_handler;
+	using sl::launder;
+}

@@ -13,6 +13,8 @@ namespace sl::traits {
 	template<typename T> struct is_floating_point : impl::is_floating_point<remove_cv_t<T>> {};
 
 	template<typename T> struct is_enumeration : bool_constant_type<__is_enum(T)> {};
+	
+	template<typename T> struct is_function : bool_constant_type<__is_function(T)> {};
 }
 
 
@@ -25,6 +27,8 @@ namespace sl::traits {
 	template<typename T> struct is_unbounded_raw_array<T[]> : true_constant_type {};
 
 	template<typename T> struct is_raw_array : bool_constant_type<is_bounded_raw_array<T>::value || is_unbounded_raw_array<T>::value> {};
+
+	template<typename T> struct is_implicit_lifetime : bool_constant_type<__builtin_is_implicit_lifetime(T)> {};
 }
 
 
@@ -60,6 +64,9 @@ namespace sl::traits {
 	template<typename T>
 	constexpr bool is_enumeration_v = is_enumeration<T>::value;
 
+	template<typename T>
+	constexpr bool is_function_v = is_function<T>::value;
+
 
 	template<typename T>
 	constexpr bool is_bounded_raw_array_v = is_bounded_raw_array<T>::value;
@@ -69,6 +76,9 @@ namespace sl::traits {
 
 	template<typename T>
 	constexpr bool is_raw_array_v = is_raw_array<T>::value;
+
+	template<typename T>
+	constexpr bool is_implicit_lifetime_v = is_implicit_lifetime<T>::value;
 
 
 	template<typename T>
@@ -98,6 +108,9 @@ namespace sl::traits {
 	template<typename T>
 	concept enumeration = is_enumeration_v<T>;
 
+	template<typename T>
+	concept function = is_function_v<T>;
+
 
 	template<typename T>
 	concept bounded_raw_array = is_bounded_raw_array_v<T>;
@@ -107,6 +120,9 @@ namespace sl::traits {
 
 	template<typename T>
 	concept raw_array = is_raw_array_v<T>;
+
+	template<typename T>
+	concept implicit_lifetime = is_implicit_lifetime_v<T>;
 
 
 	template<typename T>

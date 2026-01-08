@@ -8,6 +8,7 @@ option(BUILD_SHARED_LIBS "" ON)
 
 ### sources ###
 set(${PROJECT_NAME}_HEADER_FILES
+	"algorithm/aligned_to.hpp"
 	"algorithm/lookup_table_hash.hpp"
 	"algorithm/minmax.hpp"
 
@@ -40,6 +41,14 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"functional/generic_stateless_functor.hpp"
 	"functional/identity_function.hpp"
 	"functional/invoke.hpp"
+
+
+	"memory/align_value.hpp"
+	"memory/delete.hpp"
+	"memory/launder.hpp"
+	"memory/new_handler.hpp"
+	"memory/new.hpp"
+	"memory/start_lifetime_as.hpp"
 
 
 	"metaprogramming/impl/compounded_categories.hpp"
@@ -90,9 +99,11 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"cstddef"
 	"cstdint"
 	"cstdlib"
+	"new"
 	"functional"
 	"initializer_list"
 	"limits"
+	"memory"
 	"stdexcept"
 	"string"
 	"tuple"
@@ -102,7 +113,8 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 )
 
 set(${PROJECT_NAME}_SOURCE_FILES
-	""
+	"memory/delete.cpp"
+	"memory/new.cpp"
 )
 
 
@@ -111,10 +123,10 @@ list(TRANSFORM ${PROJECT_NAME}_HEADER_FILES PREPEND "include/${PROJECT_NAME}/")
 list(TRANSFORM ${PROJECT_NAME}_STD_HEADER_FILES PREPEND "include/c++/scl/")
 list(TRANSFORM ${PROJECT_NAME}_SOURCE_FILES PREPEND "src/${PROJECT_NAME}/")
 
-set(LIBRARY_TYPE INTERFACE)
-add_library(${PROJECT_NAME} INTERFACE)
-#set(LIBRARY_TYPE PUBLIC)
-#add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+#set(LIBRARY_TYPE INTERFACE)
+#add_library(${PROJECT_NAME} INTERFACE)
+set(LIBRARY_TYPE PUBLIC)
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
 target_sources(${PROJECT_NAME} ${LIBRARY_TYPE} FILE_SET ${PROJECT_NAME}_HEADERS TYPE HEADERS BASE_DIRS "include" FILES ${${PROJECT_NAME}_HEADER_FILES})
 target_sources(${PROJECT_NAME} ${LIBRARY_TYPE} FILE_SET ${PROJECT_NAME}_STD_HEADERS TYPE HEADERS BASE_DIRS "include" FILES ${${PROJECT_NAME}_STD_HEADER_FILES})
 
