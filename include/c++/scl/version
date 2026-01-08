@@ -459,11 +459,11 @@
 //#undef  __cpp_lib_interpolate
 //#define __cpp_lib_interpolate 201902L
 
-//#undef  __cpp_lib_invoke
-//#define __cpp_lib_invoke 201411L
+#undef  __cpp_lib_invoke
+#define __cpp_lib_invoke 201411L
 
-//#undef  __cpp_lib_invoke_r
-//#define __cpp_lib_invoke_r 202106L
+#undef  __cpp_lib_invoke_r
+#define __cpp_lib_invoke_r 202106L
 
 //#undef  __cpp_lib_ios_noreplace
 //#define __cpp_lib_ios_noreplace 202207L

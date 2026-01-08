@@ -1,0 +1,24 @@
+#pragma once
+
+//Comparison Functors
+#include "streamline/functional/comparison.hpp"
+namespace std {
+
+
+	using equal_to = sl::equal_functor;
+	using less = sl::less_functor;
+}
+
+//Identity functor
+#include "streamline/functional/identity_function.hpp"
+namespace std {
+	using identity = sl::identity_functor;
+}
+
+
+//Function support
+#include "streamline/functional/invoke.hpp"
+namespace std {
+	using sl::invoke;
+	using sl::invoke_r;
+}

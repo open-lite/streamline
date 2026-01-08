@@ -39,6 +39,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"functional/comparison.hpp"
 	"functional/generic_stateless_functor.hpp"
 	"functional/identity_function.hpp"
+	"functional/invoke.hpp"
 
 
 	"metaprogramming/impl/compounded_categories.hpp"
@@ -62,6 +63,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/in_place.hpp"
 	"metaprogramming/integer_sequence.hpp"
 	"metaprogramming/integral_constant.hpp"
+	"metaprogramming/invoke_result.hpp"
 	"metaprogramming/move.hpp"
 	"metaprogramming/pack_indices_of_type.hpp"
 	"metaprogramming/tuple_traits.fwd.hpp"
@@ -88,6 +90,7 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"cstddef"
 	"cstdint"
 	"cstdlib"
+	"functional"
 	"initializer_list"
 	"limits"
 	"stdexcept"

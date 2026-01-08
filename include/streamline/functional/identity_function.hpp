@@ -18,3 +18,14 @@ namespace sl {
 		};
 	};
 }
+
+
+namespace sl {
+	template<index_t I>
+	struct identity_tuple_functor {
+		template<typename T, index_t J = npos>
+		constexpr auto&& operator()(T&& t, index_constant_type<J> = {}) const noexcept {
+			return forward<T>(t).operator[](index_constant<I>);
+		};
+	};
+}

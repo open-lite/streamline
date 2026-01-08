@@ -1,5 +1,6 @@
 #pragma once
 #include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/invoke_result.hpp"
 #include "streamline/universal/make.hpp"
 #include "streamline/universal/make_deduced.hpp"
 
@@ -62,6 +63,52 @@ namespace sl::traits {
 
 
 
+	template<typename FnT, typename... ArgTs> 
+	struct is_invocable : bool_constant_type<requires { 
+		typename invoke_result_t<FnT, ArgTs...>; 
+	}>{};
+
+	template<typename FnT, typename... ArgTs> 
+	struct is_noexcept_invocable : bool_constant_type<is_invocable<FnT, ArgTs...>::value && requires { 
+		requires invoke_result<FnT, ArgTs...>::__is_noexcept;
+	}>{};
+
+
+	template<typename R, typename FnT, typename... ArgTs> 
+	struct is_invocable_r : bool_constant_type<is_invocable<FnT, ArgTs...>::value && requires { 
+		requires is_convertible_to<invoke_result_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
+	}>{};
+
+	template<typename R, typename FnT, typename... ArgTs>
+	struct is_noexcept_invocable_r : bool_constant_type<is_noexcept_invocable<FnT, ArgTs...>::value && requires {
+		requires is_noexcept_convertible_to<invoke_result_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
+	}>{};
+
+	
+
+	template<typename FnT, typename TupleLikeT> 
+	struct is_invocable_each : bool_constant_type<requires { 
+		typename invoke_each_result_t<FnT, TupleLikeT>; 
+	}>{};
+
+	template<typename FnT, typename TupleLikeT> 
+	struct is_noexcept_invocable_each : bool_constant_type<is_invocable_each<FnT, TupleLikeT>::value && requires { 
+		requires invoke_each_result<FnT, TupleLikeT>::__is_noexcept;
+	}>{};
+
+
+	template<typename R, typename FnT, typename TupleLikeT> 
+	struct is_invocable_each_r : bool_constant_type<is_invocable_each<FnT, TupleLikeT>::value && requires { 
+		requires is_convertible_to<invoke_each_result_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
+	}>{};
+
+	template<typename R, typename FnT, typename TupleLikeT> 
+	struct is_noexcept_invocable_each_r : bool_constant_type<is_noexcept_invocable_each<FnT, TupleLikeT>::value && requires { 
+		requires is_noexcept_convertible_to<invoke_each_result_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
+	}>{};
+
+	
+
     template<typename T, typename... Args>
     struct is_makeable_from : bool_constant_type<requires (Args&&... args) {
 		{ ::sl::universal::make<T>(forward<Args>(args)...) } noexcept;
@@ -109,6 +156,28 @@ namespace sl::traits {
 	constexpr bool is_specialization_of_v = is_specialization_of<T, TemplateT>::value;
 
 
+	template<typename FnT, typename... ArgTs> 
+	constexpr bool is_invocable_v = is_invocable<FnT, ArgTs...>::value;
+	template<typename FnT, typename... ArgTs> 
+	constexpr bool is_noexcept_invocable_v = is_noexcept_invocable<FnT, ArgTs...>::value;
+	
+	template<typename R, typename FnT, typename... ArgTs> 
+	constexpr bool is_invocable_r_v = is_invocable_r<R, FnT, ArgTs...>::value;
+	template<typename R, typename FnT, typename... ArgTs> 
+	constexpr bool is_noexcept_invocable_r_v = is_noexcept_invocable_r<R, FnT, ArgTs...>::value;
+
+
+	template<typename FnT, typename TupleLikeT> 
+	constexpr bool is_invocable_each_v = is_invocable_each<FnT, TupleLikeT>::value;
+	template<typename FnT, typename TupleLikeT> 
+	constexpr bool is_noexcept_invocable_each_v = is_noexcept_invocable_each<FnT, TupleLikeT>::value;
+	
+	template<typename R, typename FnT, typename TupleLikeT> 
+	constexpr bool is_invocable_each_r_v = is_invocable_each_r<R, FnT, TupleLikeT>::value;
+	template<typename R, typename FnT, typename TupleLikeT> 
+	constexpr bool is_noexcept_invocable_each_r_v = is_noexcept_invocable_each_r<R, FnT, TupleLikeT>::value;
+
+
     template<typename T, typename... Args>
 	constexpr bool is_makeable_from_v = is_makeable_from<T, Args...>::value;
 
@@ -149,6 +218,28 @@ namespace sl::traits {
 
     template<typename T, template<size_t, typename...> typename TemplateT>
 	concept specialization_of = is_specialization_of_v<T, TemplateT>;
+
+
+	template<typename FnT, typename... ArgTs> 
+	concept invocable = is_invocable<FnT, ArgTs...>::value;
+	template<typename FnT, typename... ArgTs> 
+	concept noexcept_invocable = is_noexcept_invocable<FnT, ArgTs...>::value;
+	
+	template<typename R, typename FnT, typename... ArgTs> 
+	concept invocable_r = is_invocable_r<R, FnT, ArgTs...>::value;
+	template<typename R, typename FnT, typename... ArgTs> 
+	concept noexcept_invocable_r = is_noexcept_invocable_r<R, FnT, ArgTs...>::value;
+
+
+	template<typename FnT, typename TupleLikeT> 
+	concept invocable_each = is_invocable_each<FnT, TupleLikeT>::value;
+	template<typename FnT, typename TupleLikeT> 
+	concept noexcept_invocable_each = is_noexcept_invocable_each<FnT, TupleLikeT>::value;
+	
+	template<typename R, typename FnT, typename TupleLikeT> 
+	concept invocable_each_r = is_invocable_each_r<R, FnT, TupleLikeT>::value;
+	template<typename R, typename FnT, typename TupleLikeT> 
+	concept noexcept_invocable_each_r = is_noexcept_invocable_each_r<R, FnT, TupleLikeT>::value;
 
 
     template<typename T, typename... Args>
