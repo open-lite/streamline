@@ -7,6 +7,8 @@ namespace sl {
 	using ::size_t;
 	using index_t = ::size_t;
 	using ::ptrdiff_t;
+	using offset_t = ::ptrdiff_t;
+	using uoffset_t = ::size_t;
 	using ::max_align_t;
 	using nullptr_t = decltype(nullptr);
 }
