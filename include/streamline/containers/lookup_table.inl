@@ -1,5 +1,7 @@
 #pragma once
 #include "streamline/containers/lookup_table.hpp"
+#include "streamline/containers/impl/make_from_container.hpp"
+#include "streamline/containers/impl/make_from_value.hpp"
 
 namespace sl {
 	// template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
@@ -135,3 +137,40 @@ namespace sl {
 	}
 }
 
+
+
+namespace sl {
+	template<auto I, traits::specialization_of<generic_lookup_table> LookupTableT>
+	constexpr auto&& get(LookupTableT&& lut) noexcept {
+		return forward<LookupTableT>(lut).template get<I>();
+	}
+}
+
+
+namespace sl {
+	template<traits::specialization_of<generic_lookup_table> R, typename Arg, typename XfrmEachToKeyFn, typename XfrmEachToValueFn, typename XfrmSeq, typename RawArg> 
+	requires (
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, RawArg> &&
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, RawArg> &&
+		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
+	)
+	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn, XfrmEachToValueFn&& xfrm_each_to_value_fn, XfrmSeq xfrm_seq, in_place_adl_tag_type<R>) noexcept {
+		return impl::make_lookup_table_from_container<R>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
+	}
+}
+
+namespace sl {
+	template<template<size_t, typename...> typename R, typename Arg, typename XfrmEachToKeyFn, typename XfrmEachToValueFn, typename XfrmSeq, typename RawArg> 
+	requires (
+		traits::is_tuple_like_v<RawArg> &&
+		traits::is_noexcept_invocable_each_v<XfrmEachToKeyFn, RawArg> &&
+		traits::is_noexcept_invocable_each_v<XfrmEachToValueFn, RawArg> &&
+		traits::same_container_as<R, generic_lookup_table, tuple_traits<XfrmSeq>::size, int, placeholder_t>
+	)
+	constexpr auto make_deduced(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn, XfrmEachToValueFn&& xfrm_each_to_value_fn, XfrmSeq xfrm_seq, in_place_container_adl_tag_type<R>) noexcept {
+		return impl::make_lookup_table_from_container<lookup_table<tuple_traits<XfrmSeq>::size, 
+			remove_cvref_t<invoke_each_result_t<XfrmEachToKeyFn, RawArg>>,
+			remove_cvref_t<invoke_each_result_t<XfrmEachToValueFn, RawArg>>
+		>>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
+	}
+}

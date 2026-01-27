@@ -1,8 +1,10 @@
 #pragma once
 #include "streamline/containers/array.hpp"
 #include "streamline/diagnostics/terminate.hpp"
-#include "streamline/containers/impl/make_array.hpp"
 #include "streamline/algorithm/minmax.hpp"
+
+#include "streamline/containers/impl/make_from_container.hpp"
+#include "streamline/containers/impl/make_from_value.hpp"
 
 
 //Element access
@@ -160,39 +162,45 @@ namespace sl {
 
 
 namespace sl {
-	template<traits::specialization_of<generic_array> R, typename Arg, typename XfrmFn, typename RawArg> 
-	requires (traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
-	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmFn&& xfrm_each_fn, in_place_adl_tag_type<R>) noexcept {
-		constexpr size_t size = algo::min(tuple_traits<R>::size, container_traits<RawArg>::size);
-		return impl::make_array_from_container<R>(forward<Arg>(array_ish), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
+	template<traits::specialization_of<generic_array> R, typename Arg, typename XfrmEachFn, typename XfrmSeq, typename RawArg>
+	requires (
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn, RawArg> &&
+		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
+	)
+	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn, XfrmSeq xfrm_seq, in_place_adl_tag_type<R>) noexcept {
+		return impl::make_array_from_container<R>(forward<Arg>(array_ish), forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 
 
-	template<traits::specialization_of<generic_array> R, typename Arg, size_t N, typename XfrmFn>
-	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn) noexcept {
-		constexpr size_t size = algo::min(tuple_traits<R>::size, N);
-		return impl::make_array_from_value<R>(forward<Arg>(value), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
+	template<traits::specialization_of<generic_array> R, typename Arg, size_t N, typename XfrmEachFn, typename XfrmSeq>
+	requires traits::is_noexcept_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn, Arg, index_constant_type<0>>
+	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn, XfrmSeq xfrm_seq) noexcept {
+		return impl::make_array_from_value<R>(forward<Arg>(value), forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 }
 
 namespace sl {
-	template<template<size_t, typename...> typename R, typename Arg, typename XfrmFn, typename RawArg>
+	template<template<size_t, typename...> typename R, typename Arg, typename XfrmEachFn, typename XfrmSeq, typename RawArg>
 	requires (
 		traits::is_tuple_like_v<RawArg> &&
-		tuple_traits<RawArg>::homogeneous &&
-		traits::same_container_as<R, generic_array, tuple_traits<RawArg>::size, typename tuple_traits<RawArg>::common_type>
+		traits::is_noexcept_invocable_each_v<XfrmEachFn, RawArg> &&
+		traits::same_container_as<R, generic_array, tuple_traits<XfrmSeq>::size, placeholder_t>
 	)
-	constexpr array<tuple_traits<RawArg>::size, typename tuple_traits<RawArg>::common_type>
-	make_deduced(Arg&& array_ish, XfrmFn&& xfrm_each_fn, in_place_container_adl_tag_type<R>) noexcept {
-		constexpr size_t size = tuple_traits<RawArg>::size;
-		return impl::make_array_from_container<array<size, typename tuple_traits<RawArg>::common_type>>(forward<Arg>(array_ish), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
+	constexpr auto make_deduced(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn, XfrmSeq xfrm_seq, in_place_container_adl_tag_type<R>) noexcept {
+		return impl::make_array_from_container<array<XfrmSeq::size(), remove_cvref_t<invoke_each_result_t<XfrmEachFn, RawArg>>>>(
+			forward<Arg>(array_ish), forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq
+		);
 	}
 
 
-	template<template<size_t, typename...> typename R, typename Arg, size_t N, typename XfrmFn>
-	requires traits::same_container_as<R, generic_array, N, remove_cvref_t<Arg>>
-	constexpr array<N, remove_cvref_t<Arg>> make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn) noexcept {
-		constexpr size_t size = N;
-		return impl::make_array_from_value<array<N, remove_cvref_t<Arg>>>(forward<Arg>(value), forward<XfrmFn>(xfrm_each_fn), index_sequence_of_length<size>);
+	template<template<size_t, typename...> typename R, typename Arg, size_t N, typename XfrmEachFn, typename XfrmSeq>
+	requires (
+		traits::is_noexcept_invocable_v<XfrmEachFn, Arg, index_constant_type<0>> &&
+		traits::same_container_as<R, generic_array, N, placeholder_t>
+	)
+	constexpr auto make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn, XfrmSeq xfrm_seq) noexcept {
+		return impl::make_array_from_value<array<XfrmSeq::size(), remove_cvref_t<invoke_result_t<XfrmEachFn, Arg, index_constant_type<0>>>>>(
+			forward<Arg>(value), forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq
+		);
 	}
 }

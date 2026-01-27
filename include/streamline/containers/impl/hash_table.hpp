@@ -31,7 +31,7 @@ namespace sl::impl {
 
 			array<storage_size, bucket_type> buckets{};
 			array<storage_size, bucket_ref_type> bucket_refs = 
-				sl::universal::make<decltype(bucket_refs)>(buckets, []<index_t I>(auto const& bucket, index_constant_type<I>) -> bucket_ref_type{
+				sl::universal::make<decltype(bucket_refs)>(buckets, []<index_t I>(auto const& bucket, index_constant_type<I>) noexcept -> bucket_ref_type{
 					return bucket_ref_type{I, &bucket};
 				});
 			prg_type prg{};

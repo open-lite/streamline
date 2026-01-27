@@ -32,6 +32,7 @@ namespace sl {
 		using value_type      = pair<const Key, Value>;
 		using container_type  = array<N, value_type>;
 		using size_type       = typename container_type::size_type;
+		using index_type      = key_type;
 		using difference_type = typename container_type::difference_type;
 		using hash_type       = Hash;
 		using key_equal_type  = KeyEqual;
@@ -129,6 +130,13 @@ namespace sl {
 	>
 	requires traits::tuple_like<TupleLikeT<N, pair<const Key, Value>, Args...>>
 	generic_lookup_table(TupleLikeT<N, pair<const Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
+
+
+	template<size_t N, traits::pair_like T>
+	using lookup_table_from_pair_type = lookup_table<N, 
+		remove_const_t<typename tuple_traits<T>::template type_of_element<0>>,
+		typename tuple_traits<T>::template type_of_element<1>
+	>;
 }
 
 namespace sl {
@@ -139,6 +147,52 @@ namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	struct tuple_traits<lookup_table<N, Key, Value, Hash, KeyEqual>> : 
 		tuple_traits<typename lookup_table<N, Key, Value, Hash, KeyEqual>::container_type> {};
+}
+
+
+namespace sl {
+	template<auto I, traits::specialization_of<generic_lookup_table> LookupTableT>
+	constexpr auto&& get(LookupTableT&& lut) noexcept;
+
+
+	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
+	constexpr void swap(lookup_table<N, Key, Value, Hash, KeyEqual>& lhs, lookup_table<N, Key, Value, Hash, KeyEqual>& rhs) noexcept(noexcept(lhs.swap(rhs)));
+}
+
+
+namespace sl {
+	template<
+		traits::specialization_of<generic_lookup_table> R, 
+		typename Arg, 
+		typename XfrmEachToKeyFn = identity_tuple_functor<0>, 
+		typename XfrmEachToValueFn = identity_tuple_functor<1>,
+		typename XfrmSeq = index_sequence_of_length_type<algo::min(tuple_traits<R>::size, container_traits<remove_cvref_t<Arg>>::size)>,
+		typename RawArg = remove_cvref_t<Arg>
+	> 
+	requires (
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, RawArg> &&
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, RawArg> &&
+		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
+	)
+	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
+}
+
+namespace sl {
+	template<
+		template<size_t, typename...> typename R,
+		typename Arg,
+		typename XfrmEachToKeyFn = identity_tuple_functor<0>,
+		typename XfrmEachToValueFn = identity_tuple_functor<1>,
+		typename XfrmSeq = index_sequence_of_length_type<tuple_traits<remove_cvref_t<Arg>>::size>,
+		typename RawArg = remove_cvref_t<Arg>
+	> 
+	requires (
+		traits::is_tuple_like_v<RawArg> &&
+		traits::is_noexcept_invocable_each_v<XfrmEachToKeyFn, RawArg> &&
+		traits::is_noexcept_invocable_each_v<XfrmEachToValueFn, RawArg> &&
+		traits::same_container_as<R, generic_lookup_table, tuple_traits<XfrmSeq>::size, int, placeholder_t>
+	)
+	constexpr auto make_deduced(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
 }
 
 
@@ -186,8 +240,43 @@ namespace sl::test {
 	static_assert(yeet[1259139578][0] == 7 && yeet[1259139578][1] == 8);
 	static_assert(sl::get<1124135>(yeet)[0] == 3);
 
+	using filter = filtered_sequence_t<index_sequence_of_length_type<4>, []<index_t I>(index_constant_type<I>){ return (*(yeet.begin() + I))[second_constant][0] > 4; }>;
+	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic_lookup_table>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+		return p.operator[](second_constant)[0];
+	}, filter{})};
+
+	static_assert(yeet_filtered[212351] == 5);
+	static_assert(yeet_filtered[1259139578] == 7);
+	static_assert(sl::get<212351>(yeet_filtered) == 5);
+
+
+
+
+	constexpr lookup_table<4, int, array<2, int>> yeet_remastered = make_deduced<generic_lookup_table>(yeet);
+	static_assert(yeet_remastered[0][0] == 1          && yeet_remastered[0][1] == 2);
+	static_assert(yeet_remastered[1124135][0] == 3    && yeet_remastered[1124135][1] == 4);
+	static_assert(yeet_remastered[212351][0] == 5     && yeet_remastered[212351][1] == 6);
+	static_assert(yeet_remastered[1259139578][0] == 7 && yeet_remastered[1259139578][1] == 8);
+	static_assert(sl::get<1124135>(yeet_remastered)[0] == 3);
+
+	constexpr lookup_table<4, int, int> yeet_reborn = make_deduced<generic_lookup_table>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+		return p.operator[](second_constant)[0];
+	});
+	static_assert(yeet_reborn[0] == 1);
+	static_assert(yeet_reborn[1124135] == 3);
+	static_assert(yeet_reborn[212351] == 5);
+	static_assert(yeet_reborn[1259139578] == 7);
+	static_assert(sl::get<1124135>(yeet_reborn) == 3);
 
 	
+	constexpr lookup_table<3, int, int> yeet_reborn_alt = make<lookup_table<3, int, int>>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+		return p.operator[](second_constant)[0];
+	});
+	static_assert(yeet_reborn_alt[0] == 1);
+	static_assert(yeet_reborn_alt[1124135] == 3);
+	static_assert(yeet_reborn_alt[212351] == 5);
+	static_assert(sl::get<1124135>(yeet_reborn_alt) == 3);
+
 
 	constexpr lookup_table<4, sl::uint64_t, immoble> doh{{{
 		{0, immoble{1}},

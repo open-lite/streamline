@@ -12,14 +12,14 @@ namespace sl::impl {
 	
 	public:
 		//TODO: figure out how to do this with explicit object parameters
-		template<typename Self>
-		constexpr auto&& operator[](this Self&& self, index_constant_type<I>) noexcept { 
-			return static_cast<copy_cvref_t<Self, tuple_element<I, T>>>(self).value;
-		}
+		//template<typename Self>
+		//constexpr auto&& operator[](this Self&& self, index_constant_type<I>) noexcept { 
+		//	return static_cast<copy_cvref_t<Self, tuple_element<I, T>>>(self).value;
+		//}
 
-		//constexpr T      &  operator[](index_constant_type<I>)      &  noexcept { return static_cast<tuple_element*>(this)->value; }
-		//constexpr T const&  operator[](index_constant_type<I>) const&  noexcept { return static_cast<tuple_element*>(this)->value; }
-		//constexpr T      && operator[](index_constant_type<I>)      && noexcept { return move(static_cast<tuple_element*>(this)->value); }
-		//constexpr T const&& operator[](index_constant_type<I>) const&& noexcept { return move(static_cast<tuple_element*>(this)->value); }
+		constexpr T      &  operator[](index_constant_type<I>)      &  noexcept { return static_cast<tuple_element      *>(this)->value; }
+		constexpr T const&  operator[](index_constant_type<I>) const&  noexcept { return static_cast<tuple_element const*>(this)->value; }
+		constexpr T      && operator[](index_constant_type<I>)      && noexcept { return move(static_cast<tuple_element      *>(this)->value); }
+		constexpr T const&& operator[](index_constant_type<I>) const&& noexcept { return move(static_cast<tuple_element const*>(this)->value); }
 	};
 }

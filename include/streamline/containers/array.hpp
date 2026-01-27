@@ -1,4 +1,5 @@
 #pragma once
+#include "streamline/algorithm/minmax.hpp"
 #include "streamline/containers/array.fwd.hpp"
 #include "streamline/containers/impl/array_data.hpp"
 
@@ -120,27 +121,57 @@ namespace sl {
 
 
 namespace sl {
-	template<traits::specialization_of<generic_array> R, typename Arg, typename XfrmFn = identity_functor, typename RawArg = remove_cvref_t<Arg>> 
-	requires (traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
-	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
+	template<
+		traits::specialization_of<generic_array> R,
+		typename Arg,
+		typename XfrmEachFn = identity_functor,
+		typename XfrmSeq = index_sequence_of_length_type<algo::min(tuple_traits<R>::size, container_traits<remove_cvref_t<Arg>>::size)>,
+		typename RawArg = remove_cvref_t<Arg>
+	> 
+	requires (
+		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn, RawArg> &&
+		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
+	)
+	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
 
-	template<traits::specialization_of<generic_array> R, typename Arg, size_t N = tuple_traits<R>::size, typename XfrmFn = identity_functor>
-	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn = identity_functor{}) noexcept;
+	template<
+		traits::specialization_of<generic_array> R, 
+		typename Arg, 
+		size_t N = tuple_traits<R>::size, 
+		typename XfrmEachFn = identity_functor,
+		typename XfrmSeq = index_sequence_of_length_type<algo::min(tuple_traits<R>::size, N)>
+	>
+	requires traits::is_noexcept_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn, Arg, index_constant_type<0>>
+	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}) noexcept;
 }
 
 namespace sl {
-	template<template<size_t, typename...> typename R, typename Arg, typename XfrmFn = identity_functor, typename RawArg = remove_cvref_t<Arg>> 
+	template<
+		template<size_t, typename...> typename R,
+		typename Arg,
+		typename XfrmEachFn = identity_functor,
+		typename XfrmSeq = index_sequence_of_length_type<tuple_traits<remove_cvref_t<Arg>>::size>,
+		typename RawArg = remove_cvref_t<Arg>
+	>
 	requires (
 		traits::is_tuple_like_v<RawArg> &&
-		tuple_traits<RawArg>::homogeneous &&
-		traits::same_container_as<R, generic_array, tuple_traits<RawArg>::size, typename tuple_traits<RawArg>::common_type>
+		traits::is_noexcept_invocable_each_v<XfrmEachFn, RawArg> &&
+		traits::same_container_as<R, generic_array, tuple_traits<XfrmSeq>::size, placeholder_t>
 	)
-	constexpr array<tuple_traits<RawArg>::size, typename tuple_traits<RawArg>::common_type> 
-	make_deduced(Arg&& array_ish, XfrmFn&& xfrm_each_fn = identity_functor{}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
+	constexpr auto make_deduced(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
 	
-	template<template<size_t, typename...> typename R, typename Arg, size_t N, typename XfrmFn = identity_functor>
-	requires traits::same_container_as<R, generic_array, N, remove_cvref_t<Arg>>
-	constexpr array<N, remove_cvref_t<Arg>> make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmFn&& xfrm_each_fn = identity_functor{}) noexcept;
+	template<
+		template<size_t, typename...> typename R, 
+		typename Arg, 
+		size_t N, 
+		typename XfrmEachFn = identity_functor,
+		typename XfrmSeq = index_sequence_of_length_type<N>
+	>
+	requires (
+		traits::is_noexcept_invocable_v<XfrmEachFn, Arg, index_constant_type<0>> &&
+		traits::same_container_as<R, generic_array, N, placeholder_t>
+	)
+	constexpr auto make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}) noexcept;
 }
 
 #include "streamline/containers/array.inl"
@@ -232,10 +263,12 @@ constexpr int func() noexcept {
 	//constexpr auto z = move(carr).end();
 
 	{
-	constexpr auto immoble_arr = sl::make_deduced<sl::array>(sl::test::move_only(5), sl::in_place_repeat_tag<5>);
+	constexpr auto immoble_arr = sl::make_deduced<sl::array>(sl::test::move_only(5), sl::in_place_repeat_tag<5>, []<sl::index_t I>(auto&& p, sl::index_constant_type<I>) noexcept {
+		return p.value + I;
+	});
 	constexpr auto sz = immoble_arr.size();
-	//constexpr auto arr1 = sl::move(immoble_arr[0]);
-	//constexpr auto arr2 = sl::move(immoble_arr[1]);
+	constexpr auto arr1 = sl::move(immoble_arr[0]);
+	constexpr auto arr2 = sl::move(immoble_arr[1]);
 	}
 
 	{
@@ -246,10 +279,19 @@ constexpr int func() noexcept {
 	}
 
 	{
-	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{1, 2}, [](auto&& val, auto seq){return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
-	constexpr auto sz = arr_from_tuple.size();
-	constexpr auto arr1 = arr_from_tuple[0];
-	constexpr auto arr2 = arr_from_tuple[1];
+	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{1, 2}, [](auto&& val, auto seq) noexcept {return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
+	static_assert(arr_from_tuple.size() == 2);
+	static_assert(arr_from_tuple[0] == 1);
+	static_assert(arr_from_tuple[1] == 3);
+	}
+
+	{
+	constexpr static sl::tuple<int, int, int, int> t{1, 2, 3, 4};
+	using filter = sl::filtered_sequence_t<sl::index_sequence_of_length_type<4>, []<sl::index_t I>(sl::index_constant_type<I>){ return t[sl::index_constant<I>] % 2 == 0; }>;
+	constexpr auto filtered_arr_from_tuple = sl::make_deduced<sl::array>(t, sl::identity_functor{}, filter{});
+	static_assert(filtered_arr_from_tuple.size() == 2);
+	static_assert(filtered_arr_from_tuple[0] == 2);
+	static_assert(filtered_arr_from_tuple[1] == 4);
 	}
 
 	return 0;

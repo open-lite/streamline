@@ -1,6 +1,7 @@
 #pragma once
+#include "streamline/metaprogramming/declval.hpp"
+#include "streamline/metaprogramming/integer_sequence.hpp"
 #include "streamline/metaprogramming/integral_constant.hpp"
-#include "streamline/metaprogramming/type_traits/isolated_categories.hpp"
 
 
 namespace sl::impl {

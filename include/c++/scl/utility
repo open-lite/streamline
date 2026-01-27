@@ -45,7 +45,7 @@ namespace std {
 	using index_sequence = sl::index_sequence_type<Is...>;
 
 	template<typename T, size_t N>
-	using make_integer_sequence = sl::integer_sequence_of_length_type<N, T>;
+	using make_integer_sequence = sl::integer_sequence_of_length_type<T, N>;
 	template<size_t N>
 	using make_index_sequence = sl::index_sequence_of_length_type<N>;
 
