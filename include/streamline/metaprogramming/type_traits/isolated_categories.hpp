@@ -20,6 +20,9 @@ namespace sl::traits {
 
 //type categories
 namespace sl::traits {
+	template<typename T> struct is_trivially_copyable : bool_constant_type<__is_trivially_copyable(T)> {};
+	template<typename T> struct is_cheap_to_copy : bool_constant_type<(is_trivially_copyable<T>::value && sizeof(T) <= sizeof(sl::intmax_t))> {};
+
 	template<typename T>            struct is_bounded_raw_array       : false_constant_type {};
 	template<typename T, index_t N> struct is_bounded_raw_array<T[N]> : true_constant_type {};
 
@@ -69,6 +72,11 @@ namespace sl::traits {
 
 
 	template<typename T>
+	constexpr bool is_trivially_copyable_v = is_trivially_copyable<T>::value;
+	template<typename T>
+	constexpr bool is_cheap_to_copy_v = is_cheap_to_copy<T>::value;
+
+	template<typename T>
 	constexpr bool is_bounded_raw_array_v = is_bounded_raw_array<T>::value;
 
 	template<typename T>
@@ -111,6 +119,11 @@ namespace sl::traits {
 	template<typename T>
 	concept function = is_function_v<T>;
 
+
+	template<typename T>
+	concept trivially_copyable = is_trivially_copyable_v<T>;
+	template<typename T>
+	concept cheap_to_copy = is_cheap_to_copy_v<T>;
 
 	template<typename T>
 	concept bounded_raw_array = is_bounded_raw_array_v<T>;
