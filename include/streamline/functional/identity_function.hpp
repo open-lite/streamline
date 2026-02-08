@@ -28,4 +28,11 @@ namespace sl {
 			return forward<T>(t).operator[](index_constant<I>);
 		};
 	};
+
+	struct identity_index_functor {
+		template<typename T, index_t I = npos>
+		consteval sl::index_t operator()(T&&, index_constant_type<I> = {}) const noexcept {
+			return I;
+		};
+	};
 }

@@ -39,6 +39,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 
 
 	"functional/comparison.hpp"
+	"functional/default_construct_functor.hpp"
 	"functional/generic_stateless_functor.hpp"
 	"functional/identity_function.hpp"
 	"functional/invoke.hpp"
