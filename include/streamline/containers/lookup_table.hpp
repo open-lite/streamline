@@ -289,6 +289,12 @@ namespace sl::test {
 	static_assert(doh[static_cast<uint64_t>(212351)].value == 5);
 	static_assert(doh[static_cast<uint64_t>(1259139578135)].value == 7);
 
+	constexpr array<2, sl::uint64_t> keys = sl::universal::make_deduced<generic_array>(
+		doh, identity_tuple_functor<0>{}, index_sequence<1, 3>
+	);
+	static_assert(keys[0] == (1124135));
+	static_assert(keys[1] == (1259139578135));
+
 
 	constexpr array<4, pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic_array>(
 		array<4, pair<const sl::uint64_t, array<2, empty_t>>>{{
