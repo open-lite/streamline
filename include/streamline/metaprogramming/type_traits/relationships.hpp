@@ -88,7 +88,7 @@ namespace sl::traits {
 
 	template<typename FnT, typename TupleLikeT> 
 	struct is_invocable_each : bool_constant_type<requires { 
-		typename invoke_each_result_t<FnT, TupleLikeT>; 
+		typename invoke_each_result<FnT, TupleLikeT>::type; 
 	}>{};
 
 	template<typename FnT, typename TupleLikeT> 
