@@ -4,6 +4,7 @@
 #include "streamline/metaprogramming/integral_constant.hpp"
 #include "streamline/numeric/int.hpp"
 #include "streamline/metaprogramming/tuple_traits.fwd.hpp"
+#include "streamline/metaprogramming/container_traits.fwd.hpp"
 
 
 namespace sl {
@@ -76,9 +77,13 @@ namespace sl{
 
 namespace sl{ 
 	template<typename T, T... Is>
-	struct tuple_traits<integer_sequence_type<T, Is...>> {
+	struct container_traits<integer_sequence_type<T, Is...>> {
 		constexpr static size_t size = integer_sequence_type<T, Is...>::size();
 		constexpr static size_t size_bytes = integer_sequence_type<T, Is...>::size_bytes();
+	};
+
+	template<typename T, T... Is>
+	struct tuple_traits<integer_sequence_type<T, Is...>> : public container_traits<integer_sequence_type<T, Is...>> {
 		constexpr static bool homogeneous = true;
 		constexpr static bool unique = false;
 		
@@ -89,7 +94,7 @@ namespace sl{
 		using type_of_element = T;
 
 		template<typename U> struct __seq_size : size_constant_type<0> {};
-		template<> struct __seq_size<T> : size_constant_type<size> {};
+		template<> struct __seq_size<T> : size_constant_type<integer_sequence_type<T, Is...>::size()> {};
 
 		template<typename U>
 		using indices_of_type = index_sequence_of_length_type<__seq_size<U>::value>;
