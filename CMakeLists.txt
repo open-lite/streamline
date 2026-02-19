@@ -98,6 +98,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"universal/get.hpp"
 	"universal/make_deduced.hpp"
 	"universal/make.hpp"
+	"universal/swap.hpp"
 )
 
 set(${PROJECT_NAME}_STD_HEADER_FILES
