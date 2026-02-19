@@ -1,9 +1,7 @@
 #pragma once
 
 
-#if !defined(_LIBCPP___EXCEPTION_TERMINATE_H) && !defined(__EXCEPTION__)
-#define _LIBCPP___EXCEPTION_TERMINATE_H
-#define __EXCEPTION__
+#if !defined(_LIBCPP___EXCEPTION_TERMINATE_H) && !defined(__EXCEPTION__) && !defined(_GLIBCXX_CXX_CONFIG_H)
 
 namespace std {
   [[noreturn, gnu::cold]] void terminate() noexcept;
@@ -14,7 +12,8 @@ namespace std {
 	terminate_handler set_terminate(terminate_handler) noexcept;
 	terminate_handler get_terminate() noexcept;
 }
-
+#else
+#include <exception>
 #endif
 
 
