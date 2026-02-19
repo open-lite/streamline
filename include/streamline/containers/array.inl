@@ -3,16 +3,13 @@
 #include "streamline/diagnostics/terminate.hpp"
 #include "streamline/algorithm/minmax.hpp"
 
-#include "streamline/containers/impl/make_from_container.hpp"
-#include "streamline/containers/impl/make_from_value.hpp"
-
 
 //Element access
 namespace sl {
 	template<size_t N, typename T>
 	constexpr auto&& generic_array<N, T>::at(this auto&& self, generic_array::index_type pos) noexcept {
-		if(pos >= N) terminate();
-		return forward<decltype(self)>(self)._data[pos];
+		if(pos >= N) sl::terminate();
+		return sl::forward<decltype(self)>(self)._data[pos];
 	}
 	
 	template<size_t N, typename T>
@@ -22,32 +19,32 @@ namespace sl {
 	
 	template<size_t N, typename T>
 	constexpr auto&& generic_array<N, T>::operator[](this auto&& self, index_type pos) noexcept {
-		return forward<decltype(self)>(self)._data[pos];
+		return sl::forward<decltype(self)>(self)._data[pos];
 	}
 	
 	
 	template<size_t N, typename T>
 	template<index_t I>
 	constexpr auto&& generic_array<N, T>::get(this auto&& self) noexcept {
-		return forward<decltype(self)>(self)._data[I];
+		return sl::forward<decltype(self)>(self)._data[I];
 	}
 
 
 	
 	template<size_t N, typename T>
 	constexpr auto&& generic_array<N, T>::front(this auto&& self) noexcept {
-		return forward<decltype(self)>(self)._data[0];
+		return sl::forward<decltype(self)>(self)._data[0];
 	}
 	
 	template<size_t N, typename T>
 	constexpr auto&& generic_array<N, T>::back(this auto&& self) noexcept {
-		return forward<decltype(self)>(self)._data[N - 1];
+		return sl::forward<decltype(self)>(self)._data[N - 1];
 	}
 
 
 	template<size_t N, typename T>
 	constexpr auto generic_array<N, T>::data(this auto&& self) noexcept {
-		return forward_as_lvalue<decltype(self)>(self)._data;
+		return sl::forward_as_lvalue<decltype(self)>(self)._data;
 	}
 }
 
@@ -55,7 +52,7 @@ namespace sl {
 namespace sl {
 	template<size_t N, typename T>
 	constexpr auto generic_array<N, T>::begin(this auto&& self) noexcept {
-		return forward_as_lvalue<decltype(self)>(self)._data;
+		return sl::forward_as_lvalue<decltype(self)>(self)._data;
 	}
 
 	
@@ -67,7 +64,7 @@ namespace sl {
 	
 	template<size_t N, typename T>
 	constexpr auto generic_array<N, T>::end(this auto&& self) noexcept {
-		return forward_as_lvalue<decltype(self)>(self)._data + N;
+		return sl::forward_as_lvalue<decltype(self)>(self)._data + N;
 	}
 
 	template<size_t N, typename T>
