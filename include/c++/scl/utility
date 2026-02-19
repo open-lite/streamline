@@ -13,6 +13,12 @@
 #include "streamline/metaprogramming/declval.hpp"
 #include "streamline/containers/pair.hpp"
 namespace std {
+	template<sl::traits::fully_movable T>
+	constexpr void swap(T& left, T& right) 
+	noexcept(sl::traits::is_noexcept_fully_movable_v<T>) {
+		return sl::universal::swap(left, right);
+	}
+
 	using sl::forward;
 	using sl::forward_like;
 	using sl::move;
