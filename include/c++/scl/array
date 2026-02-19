@@ -7,7 +7,7 @@ namespace std {
 }
 
 
-#include "streamline/universal/make.hpp"
+#include "streamline/universal/make_deduced.hpp"
 namespace std {
 	template<typename T, size_t N>
 	constexpr std::array<sl::remove_cv_t<T>, N> to_array(T (&a)[N] ) {
