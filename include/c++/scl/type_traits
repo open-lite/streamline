@@ -19,9 +19,17 @@ namespace std {
 #include <streamline/metaprogramming/type_traits/supported_operations.hpp>
 namespace std {
 	using namespace sl::traits;
+
+
+	template<typename T> struct is_void : is_same_as<void, sl::remove_cv_t<T>> {};
+	template<typename T> constexpr bool is_void_v = is_void<T>::value;
 	
 	template<typename T> using is_enum = is_enumeration<T>;
 	template<typename T> constexpr bool is_enum_v = is_enumeration_v<T>;
+
+	template<typename T> using is_array = is_raw_array<T>;
+	template<typename T> constexpr bool is_array_v = is_raw_array_v<T>;
+
 
 	template<typename T> using is_const = is_const_qualified<T>;
 	template<typename T> constexpr bool is_const_v = is_const_qualified_v<T>;

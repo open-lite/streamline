@@ -20,8 +20,12 @@ namespace sl::traits {
 
 //type categories
 namespace sl::traits {
+	template<typename T> struct is_object : bool_constant_type<__is_object(T)> {};
+
 	template<typename T> struct is_trivially_copyable : bool_constant_type<__is_trivially_copyable(T)> {};
 	template<typename T> struct is_cheap_to_copy : bool_constant_type<(is_trivially_copyable<T>::value && sizeof(T) <= sizeof(sl::intmax_t))> {};
+
+	template<typename T> struct is_standard_layout : bool_constant_type<__is_standard_layout(T)> {};
 
 	template<typename T>            struct is_bounded_raw_array       : false_constant_type {};
 	template<typename T, index_t N> struct is_bounded_raw_array<T[N]> : true_constant_type {};
@@ -30,6 +34,8 @@ namespace sl::traits {
 	template<typename T> struct is_unbounded_raw_array<T[]> : true_constant_type {};
 
 	template<typename T> struct is_raw_array : bool_constant_type<is_bounded_raw_array<T>::value || is_unbounded_raw_array<T>::value> {};
+
+	template<typename T> struct is_polymorphic : bool_constant_type<__is_polymorphic(T)> {};
 
 	template<typename T> struct is_implicit_lifetime : bool_constant_type<__builtin_is_implicit_lifetime(T)> {};
 }
@@ -42,6 +48,8 @@ namespace sl::traits {
 
 	template<typename T> struct is_rvalue_reference      : false_constant_type {};
 	template<typename T> struct is_rvalue_reference<T&&> : true_constant_type {};
+
+	template<typename T> struct is_reference : bool_constant_type<is_lvalue_reference<T>::value || is_rvalue_reference<T>::value> {};
 }
 
 //qualifier categories 
@@ -72,9 +80,15 @@ namespace sl::traits {
 
 
 	template<typename T>
+	constexpr bool is_object_v = is_object<T>::value;
+
+	template<typename T>
 	constexpr bool is_trivially_copyable_v = is_trivially_copyable<T>::value;
 	template<typename T>
 	constexpr bool is_cheap_to_copy_v = is_cheap_to_copy<T>::value;
+
+	template<typename T>
+	constexpr bool is_standard_layout_v = is_standard_layout<T>::value;
 
 	template<typename T>
 	constexpr bool is_bounded_raw_array_v = is_bounded_raw_array<T>::value;
@@ -86,6 +100,9 @@ namespace sl::traits {
 	constexpr bool is_raw_array_v = is_raw_array<T>::value;
 
 	template<typename T>
+	constexpr bool is_polymorphic_v = is_polymorphic<T>::value;
+
+	template<typename T>
 	constexpr bool is_implicit_lifetime_v = is_implicit_lifetime<T>::value;
 
 
@@ -94,6 +111,9 @@ namespace sl::traits {
 
 	template<typename T>
 	constexpr bool is_rvalue_reference_v = is_rvalue_reference<T>::value;
+
+	template<typename T>
+	constexpr bool is_reference_v = is_reference<T>::value;
 
 
 	template<typename T>
@@ -121,9 +141,15 @@ namespace sl::traits {
 
 
 	template<typename T>
+	concept object = is_object_v<T>;
+
+	template<typename T>
 	concept trivially_copyable = is_trivially_copyable_v<T>;
 	template<typename T>
 	concept cheap_to_copy = is_cheap_to_copy_v<T>;
+
+	template<typename T>
+	concept standard_layout = is_standard_layout_v<T>;
 
 	template<typename T>
 	concept bounded_raw_array = is_bounded_raw_array_v<T>;
@@ -135,6 +161,9 @@ namespace sl::traits {
 	concept raw_array = is_raw_array_v<T>;
 
 	template<typename T>
+	concept polymorphic = is_polymorphic_v<T>;
+
+	template<typename T>
 	concept implicit_lifetime = is_implicit_lifetime_v<T>;
 
 
@@ -143,6 +172,9 @@ namespace sl::traits {
 
 	template<typename T>
 	concept rvalue_reference = is_rvalue_reference_v<T>;
+
+	template<typename T>
+	concept reference = is_reference_v<T>;
 
 
 	template<typename T>
