@@ -106,18 +106,6 @@ namespace sl::traits {
 	struct is_noexcept_invocable_each_r : bool_constant_type<is_noexcept_invocable_each<FnT, TupleLikeT>::value && requires { 
 		requires is_noexcept_convertible_to<invoke_each_result_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
 	}>{};
-
-	
-
-    template<typename T, typename... Args>
-    struct is_makeable_from : bool_constant_type<requires (Args&&... args) {
-		{ ::sl::universal::make<T>(forward<Args>(args)...) } noexcept;
-	}> {};
-
-    template<template<size_t, typename...> typename T, typename... Args>
-    struct is_deduced_makeable_from : bool_constant_type<requires (Args&&... args) {
-		{ ::sl::universal::make_deduced<T>(forward<Args>(args)...) } noexcept;
-	}> {};
 }
 
 
@@ -176,13 +164,6 @@ namespace sl::traits {
 	constexpr bool is_invocable_each_r_v = is_invocable_each_r<R, FnT, TupleLikeT>::value;
 	template<typename R, typename FnT, typename TupleLikeT> 
 	constexpr bool is_noexcept_invocable_each_r_v = is_noexcept_invocable_each_r<R, FnT, TupleLikeT>::value;
-
-
-    template<typename T, typename... Args>
-	constexpr bool is_makeable_from_v = is_makeable_from<T, Args...>::value;
-
-    template<template<size_t, typename...> typename T, typename... Args>
-	constexpr bool is_deduced_makeable_from_v = is_deduced_makeable_from<T, Args...>::value;
 }
 
 //concepts
@@ -240,11 +221,4 @@ namespace sl::traits {
 	concept invocable_each_r = is_invocable_each_r<R, FnT, TupleLikeT>::value;
 	template<typename R, typename FnT, typename TupleLikeT> 
 	concept noexcept_invocable_each_r = is_noexcept_invocable_each_r<R, FnT, TupleLikeT>::value;
-
-
-    template<typename T, typename... Args>
-	concept makeable_from = is_makeable_from_v<T, Args...>;
-
-    template<template<size_t, typename...> typename T, typename... Args>
-	concept deduced_makeable_from = is_deduced_makeable_from_v<T, Args...>;
 }
