@@ -107,6 +107,7 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"cstdint"
 	"cstdio"
 	"cstdlib"
+	"cstring"
 	"exception"
 	"new"
 	"functional"
