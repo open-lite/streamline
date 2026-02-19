@@ -34,6 +34,7 @@ namespace sl::traits {
 	}> {};
 
 	template<typename T> struct is_span_like : bool_constant_type<requires (T span_ish, index_t i){
+		requires is_container_like<T>::value;
 		{span_ish[i]} noexcept;// -> same_as<typename T::const_reference_type>;
 		{span_ish.data()} noexcept;// -> same_as<typename T::const_pointer_type>;
 		{span_ish.size()} noexcept -> same_as<typename T::size_type>;
