@@ -1,5 +1,5 @@
 #pragma once
-#include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/constant.hpp"
 #include "streamline/metaprogramming/type_modifiers.hpp"
 
 #include "streamline/metaprogramming/impl/isolated_categories.hpp"

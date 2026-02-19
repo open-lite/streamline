@@ -3,11 +3,11 @@
 
 namespace sl {
 	template<typename T, T V>
-	struct integral_constant_type {
+	struct constant_type {
 		constexpr static T value = V;
 	public:
 		using value_type = T;
-		using type = integral_constant_type<T, V>;
+		using type = constant_type<T, V>;
 	public:
 		consteval operator value_type() const noexcept { return value; }
     	consteval value_type operator()() const noexcept { return value; }
@@ -17,13 +17,13 @@ namespace sl {
 
 namespace sl {
 	template<index_t I>
-	using index_constant_type = integral_constant_type<index_t, I>;
+	using index_constant_type = constant_type<index_t, I>;
 
 	template<size_t N>
-	using size_constant_type = integral_constant_type<size_t, N>;
+	using size_constant_type = constant_type<size_t, N>;
 	
 	template<bool B>
-	using bool_constant_type = integral_constant_type<bool, B>;
+	using bool_constant_type = constant_type<bool, B>;
 }
 
 namespace sl {
@@ -35,7 +35,7 @@ namespace sl {
 
 namespace sl {
 	template<typename T, T V>
-	constexpr integral_constant_type<T, V> integral_constant{};
+	constexpr constant_type<T, V> constant{};
 }
 
 namespace sl {

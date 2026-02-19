@@ -2,10 +2,10 @@
 
 
 //base classes
-#include <streamline/metaprogramming/integral_constant.hpp>
+#include <streamline/metaprogramming/constant.hpp>
 namespace std {
 	template<typename T, T V>
-	using integral_constant = sl::integral_constant_type<T, V>;
+	using integral_constant = sl::constant_type<T, V>;
 	template<bool B>
 	using bool_constant     = sl::bool_constant_type<B>;
 	using true_type         = sl::true_constant_type;

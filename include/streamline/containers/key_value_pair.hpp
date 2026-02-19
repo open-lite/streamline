@@ -4,7 +4,7 @@
 #include "streamline/numeric/int.hpp"
 #include "streamline/metaprogramming/tuple_traits.fwd.hpp"
 #include "streamline/metaprogramming/container_traits.fwd.hpp"
-#include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/constant.hpp"
 #include "streamline/containers/tuple.fwd.hpp"
 
 

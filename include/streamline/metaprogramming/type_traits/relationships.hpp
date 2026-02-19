@@ -1,5 +1,5 @@
 #pragma once
-#include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/constant.hpp"
 #include "streamline/metaprogramming/invoke_return_type.hpp"
 
 #include "streamline/metaprogramming/impl/relationships.hpp"

@@ -1,7 +1,7 @@
 #pragma once
 #include "streamline/metaprogramming/conditional.hpp"
 #include "streamline/metaprogramming/type_of_pack_element.hpp"
-#include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/constant.hpp"
 #include "streamline/numeric/int.hpp"
 #include "streamline/metaprogramming/tuple_traits.fwd.hpp"
 #include "streamline/metaprogramming/container_traits.fwd.hpp"
@@ -17,7 +17,7 @@ namespace sl {
 		template<index_t I>
 		consteval static T get() noexcept 
 		requires (I < sizeof...(Is)){ 
-			return type_of_pack_element_t<I, integral_constant_type<T, Is>...>::value;
+			return type_of_pack_element_t<I, constant_type<T, Is>...>::value;
 		}
 	};
 
@@ -109,7 +109,7 @@ namespace sl{
 
 		template<typename T, T I, T... Is, T... Js, auto Pred>
 		struct make_filtered_sequence<integer_sequence_type<T, I, Is...>, integer_sequence_type<T, Js...>, Pred> :
-			make_filtered_sequence<integer_sequence_type<T, Is...>, conditional_t<Pred(integral_constant<T, I>), integer_sequence_type<T, Js..., I>, integer_sequence_type<T, Js...>>, Pred> {};
+			make_filtered_sequence<integer_sequence_type<T, Is...>, conditional_t<Pred(constant<T, I>), integer_sequence_type<T, Js..., I>, integer_sequence_type<T, Js...>>, Pred> {};
 
 		template<typename T, T... Js, auto Pred>
 		struct make_filtered_sequence<integer_sequence_type<T>, integer_sequence_type<T, Js...>, Pred> : type_identity<integer_sequence_type<T, Js...>> {};

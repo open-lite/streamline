@@ -12,7 +12,7 @@ namespace sl::functor {
 	struct invoke_each {
 		template<typename T, sl::index_t... Is, typename... Args>
 		constexpr decltype(auto) operator()(sl::integer_sequence_type<T, Is...>, Args&&... args) const noexcept {
-			return (sl::invoke(Func, sl::forward<Args>(args)..., sl::integral_constant<T, Is>), ...);
+			return (sl::invoke(Func, sl::forward<Args>(args)..., sl::constant<T, Is>), ...);
 		};
 	};
 }

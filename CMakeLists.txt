@@ -86,7 +86,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/forward.hpp"
 	"metaprogramming/in_place.hpp"
 	"metaprogramming/integer_sequence.hpp"
-	"metaprogramming/integral_constant.hpp"
+	"metaprogramming/constant.hpp"
 	"metaprogramming/invoke_return_type.hpp"
 	"metaprogramming/move.hpp"
 	"metaprogramming/pack_indices_of_type.hpp"

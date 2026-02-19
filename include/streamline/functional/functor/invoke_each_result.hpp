@@ -12,10 +12,10 @@ namespace sl::functor {
 	struct invoke_each_result {
 		template<typename T, sl::index_t... Is, typename... Args>
 		constexpr R operator()(sl::integer_sequence_type<T, Is...>, Args&&... args) const noexcept {
-			using lambda_type = sl::invoke_return_type_t<decltype(Func), Args&&..., sl::integral_constant_type<T, 0>>(*)(Args&&...) noexcept;
+			using lambda_type = sl::invoke_return_type_t<decltype(Func), Args&&..., sl::constant_type<T, 0>>(*)(Args&&...) noexcept;
 			constexpr sl::array<sizeof...(Is), lambda_type> funcs{{
-				[](Args&&... a) noexcept -> sl::invoke_return_type_t<decltype(Func), Args&&..., sl::integral_constant_type<T, 0>> {
-					return sl::invoke(Func, sl::forward<Args>(a)..., sl::integral_constant<T, Is>);
+				[](Args&&... a) noexcept -> sl::invoke_return_type_t<decltype(Func), Args&&..., sl::constant_type<T, 0>> {
+					return sl::invoke(Func, sl::forward<Args>(a)..., sl::constant<T, Is>);
 				}...
 			}};
 

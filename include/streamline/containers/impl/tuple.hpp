@@ -1,6 +1,6 @@
 #pragma once
 #include "streamline/metaprogramming/integer_sequence.hpp"
-#include "streamline/metaprogramming/integral_constant.hpp"
+#include "streamline/metaprogramming/constant.hpp"
 #include "streamline/metaprogramming/forward.hpp"
 #include "streamline/numeric/int.hpp"
 
