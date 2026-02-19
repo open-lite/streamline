@@ -150,52 +150,7 @@ namespace sl {
 }
 
 
-namespace sl {
-	template<auto I, traits::specialization_of<generic_lookup_table> LookupTableT>
-	constexpr auto&& get(LookupTableT&& lut) noexcept;
-
-
-	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	constexpr void swap(lookup_table<N, Key, Value, Hash, KeyEqual>& lhs, lookup_table<N, Key, Value, Hash, KeyEqual>& rhs) noexcept(noexcept(lhs.swap(rhs)));
-}
-
-
-namespace sl {
-	template<
-		traits::specialization_of<generic_lookup_table> R, 
-		typename Arg, 
-		typename XfrmEachToKeyFn = identity_tuple_functor<0>, 
-		typename XfrmEachToValueFn = identity_tuple_functor<1>,
-		typename XfrmSeq = index_sequence_of_length_type<algo::min(tuple_traits<R>::size, container_traits<remove_cvref_t<Arg>>::size)>,
-		typename RawArg = remove_cvref_t<Arg>
-	> 
-	requires (
-		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, RawArg> &&
-		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, RawArg> &&
-		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
-	)
-	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) noexcept;
-}
-
-namespace sl {
-	template<
-		template<size_t, typename...> typename R,
-		typename Arg,
-		typename XfrmEachToKeyFn = identity_tuple_functor<0>,
-		typename XfrmEachToValueFn = identity_tuple_functor<1>,
-		typename XfrmSeq = index_sequence_of_length_type<tuple_traits<remove_cvref_t<Arg>>::size>,
-		typename RawArg = remove_cvref_t<Arg>
-	> 
-	requires (
-		traits::is_tuple_like_v<RawArg> &&
-		traits::is_noexcept_invocable_each_v<XfrmEachToKeyFn, RawArg> &&
-		traits::is_noexcept_invocable_each_v<XfrmEachToValueFn, RawArg> &&
-		traits::same_container_as<R, generic_lookup_table, tuple_traits<XfrmSeq>::size, int, placeholder_t>
-	)
-	constexpr auto make_deduced(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>) noexcept;
-}
-
-
+#include "streamline/containers/lookup_table.universal.inl"
 #include "streamline/containers/lookup_table.inl"
 
 
@@ -238,7 +193,7 @@ namespace sl::test {
 	static_assert(yeet[1124135][0] == 3 && yeet[1124135][1] == 4);
 	static_assert(yeet[212351][0] == 5 && yeet[212351][1] == 6);
 	static_assert(yeet[1259139578][0] == 7 && yeet[1259139578][1] == 8);
-	static_assert(sl::get<1124135>(yeet)[0] == 3);
+	static_assert(sl::universal::get<1124135>(yeet)[0] == 3);
 
 	using filter = filtered_sequence_t<index_sequence_of_length_type<4>, []<index_t I>(index_constant_type<I>){ return (*(yeet.begin() + I))[second_constant][0] > 4; }>;
 	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic_lookup_table>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
@@ -312,4 +267,21 @@ namespace sl::test {
 			{3, array<2, empty_t>{}}
 		}}
 	);
+
+	
+	using bucket_type = frozen::bits::cvector<index_t, 0>;
+	using bucket_ref_type = typename frozen::bits::pmh_buckets<0>::bucket_ref;
+
+	constexpr bool seedable = sl::traits::is_makeable_from_v<array<0, impl::seed_or_index>, impl::seed_or_index&&, in_place_repeat_tag_type<0> const&>; 
+	constexpr auto seed_array = sl::universal::make<array<0, impl::seed_or_index>>(impl::seed_or_index{false, 0}, in_place_repeat_tag<0>);
+	constexpr array<0, bucket_type> buckets{};
+	constexpr auto make_ref = []<index_t I>(auto const& bucket, index_constant_type<I>) noexcept -> bucket_ref_type {
+		return bucket_ref_type{I, &bucket};
+	};
+	constexpr bool bucketable = sl::traits::is_makeable_from_v<array<0, bucket_ref_type>, decltype(buckets), decltype(make_ref)>;
+	//static_assert(traits::is_invocable_each_r_v<bucket_ref_type, decltype(make_ref), const array<0, bucket_type>&>);
+	//using x = sl::invoke_each_result_t<decltype(make_ref), const array<0, bucket_type>&>;
+	//using y = common_type_t<>;
+	constexpr auto bucket_array = sl::make<array<0, bucket_ref_type>>(buckets, make_ref);
+
 }

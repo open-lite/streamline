@@ -1,4 +1,6 @@
 #pragma once
+#include "streamline/containers/tuple.fwd.hpp"
+
 #include "streamline/metaprogramming/common_type.hpp"
 #include "streamline/metaprogramming/integer_sequence.hpp"
 #include "streamline/metaprogramming/tuple_traits.fwd.hpp"
@@ -11,20 +13,12 @@
 #include "streamline/containers/impl/tuple.hpp"
 
 namespace sl {
-	template<size_t, typename...>
-	struct generic_tuple;
-
 	template<size_t _UnusedN, index_t... Is, typename... Ts>
 	struct generic_tuple<_UnusedN, index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
 		using index_type = index_t;
 	public:
 		using impl::tuple_element<Is, Ts>::operator[]...;
 	};
-}
-
-namespace sl {
-	template<typename... Ts>
-	using tuple = generic_tuple<sizeof...(Ts), index_sequence_for_pack_type<Ts...>, Ts...>;
 }
 
 
@@ -50,14 +44,8 @@ namespace sl {
 	};
 }
 
-namespace sl {
-	template<index_t I, traits::specialization_of<generic_tuple> TupleT>
-	constexpr auto&& get(TupleT&& a) noexcept {
-		return forward_like<TupleT>(a[index_constant<I>]);
-	}
 
-	template<typename T, traits::specialization_of<generic_tuple> TupleT>
-	constexpr auto&& get(TupleT&& a) noexcept {
-		return forward_like<TupleT>(a[index_constant<get<0>(typename tuple_traits<remove_cvref_t<TupleT>>::template indices_of_type<T>{})>]);
-	}
-}
+#include "streamline/containers/tuple.inl"
+#include "streamline/containers/tuple.universal.inl"
+
+

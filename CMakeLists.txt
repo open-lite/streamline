@@ -23,13 +23,17 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/array.fwd.hpp"
 	"containers/array.hpp"
 	"containers/array.inl"
+	"containers/array.universal.inl"
 	"containers/initializer_list.hpp"
 	"containers/initializer_list.inl"
 	"containers/lookup_table.fwd.hpp"
 	"containers/lookup_table.hpp"
 	"containers/lookup_table.inl"
-	"containers/pair.hpp"
+	"containers/lookup_table.universal.inl"
+	"containers/tuple.fwd.hpp"
 	"containers/tuple.hpp"
+	"containers/tuple.inl"
+	"containers/tuple.universal.inl"
 
 
 	"diagnostics/abort.hpp"
