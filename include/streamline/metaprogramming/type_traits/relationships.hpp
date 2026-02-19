@@ -1,8 +1,6 @@
 #pragma once
 #include "streamline/metaprogramming/integral_constant.hpp"
 #include "streamline/metaprogramming/invoke_result.hpp"
-#include "streamline/universal/make.hpp"
-#include "streamline/universal/make_deduced.hpp"
 
 #include "streamline/metaprogramming/impl/relationships.hpp"
 
@@ -40,6 +38,11 @@ namespace sl::traits {
 
 	template<typename T0, typename... Tn>
 	struct are_all_unique<T0, Tn...> : bool_constant_type<(!is_same_as<T0, Tn>::value && ...) && are_all_unique<Tn...>::value>{};
+
+
+
+	template<typename Base, typename Derived>
+	struct is_base_of : bool_constant_type<__is_base_of(Base, Derived)> {};
 
 
 
@@ -128,6 +131,8 @@ namespace sl::traits {
 	template<typename... Ts>
 	constexpr bool are_all_unique_v = are_all_unique<Ts...>::value;
 
+	template<typename Base, typename Derived>
+	constexpr bool is_base_of_v = is_base_of<Base, Derived>::value;
 
 	template<typename From, typename To>
 	constexpr bool is_convertible_to_v = is_convertible_to<From, To>::value;
@@ -184,6 +189,10 @@ namespace sl::traits {
 
 	template<typename... Ts>
 	concept all_unique = are_all_unique_v<Ts...>;
+
+
+	template<typename Base, typename Derived>
+	concept base_of = is_base_of_v<Base, Derived>;
 
 
 	template<typename From, typename To>
