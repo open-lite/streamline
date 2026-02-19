@@ -106,11 +106,24 @@ namespace sl {
 
 namespace sl {
 	template<size_t N, typename T>
-	struct container_traits<array<N, T>> : container_traits<T[N]> {};
+	struct container_traits<array<N, T>> {
+		constexpr static size_t size = N;
+		constexpr static size_t size_bytes = N * sizeof(T);
+	};
 
 	template<size_t N, typename T>
-	struct tuple_traits<array<N, T>> : tuple_traits<T[N]> {};
+	struct tuple_traits<array<N, T>> : container_traits<array<N, T>> {
+		constexpr static bool homogeneous = true;
+		constexpr static bool unique = N == 0;
+
+		using common_type = T;
+		template<size_t>
+		using type_of_element = T;
+		template<typename>
+		using indices_of_type = index_sequence_of_length_type<N>;
+	};
 }
+
 
 #include "streamline/containers/array.universal.inl"
 #include "streamline/containers/array.inl"
