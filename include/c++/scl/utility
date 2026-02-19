@@ -8,10 +8,11 @@
 #include <initializer_list>
 
 
+#include "streamline/universal/swap.hpp"
 #include "streamline/metaprogramming/forward.hpp"
 #include "streamline/metaprogramming/move.hpp"
 #include "streamline/metaprogramming/declval.hpp"
-#include "streamline/containers/pair.hpp"
+#include "streamline/containers/key_value_pair.hpp"
 namespace std {
 	template<sl::traits::fully_movable T>
 	constexpr void swap(T& left, T& right) 
@@ -23,7 +24,40 @@ namespace std {
 	using sl::forward_like;
 	using sl::move;
 	using sl::declval;
-	using sl::pair;
+}
+
+namespace std {
+	template<sl::size_t, typename...>
+	struct __generic_pair;
+
+	template<typename T1, typename T2>
+	struct __generic_pair<0, T1, T2> {
+		T1 first;
+		T2 second;
+	};
+
+	template<typename T1, typename T2>
+	using pair = __generic_pair<0, T1, T2>;
+}
+
+namespace sl {
+	template<typename T1, typename T2>
+	struct container_traits<std::pair<T1, T2>> : container_traits<tuple<T1, T2>> {};
+
+	template<typename T1, typename T2>
+	struct tuple_traits<std::pair<T1, T2>> : tuple_traits<tuple<T1, T2>> {};
+}
+
+namespace std {
+	template<sl::index_t I, sl::traits::specialization_of<__generic_pair> PairT>
+	constexpr auto&& get(PairT&& a) noexcept {
+		return forward_like<PairT>(a[sl::index_constant<I>]);
+	}
+
+	template<typename T, sl::traits::specialization_of<__generic_pair> PairT>
+	constexpr auto&& get(PairT&& a) noexcept {
+		return forward_like<PairT>(a[sl::index_constant<get<0>(typename sl::tuple_traits<sl::remove_cvref_t<PairT>>::template indices_of_type<T>{})>]);
+	}
 }
 
 

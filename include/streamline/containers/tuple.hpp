@@ -9,6 +9,7 @@
 #include "streamline/metaprogramming/empty_t.hpp"
 #include "streamline/metaprogramming/type_traits/relationships.hpp"
 #include "streamline/metaprogramming/pack_indices_of_type.hpp"
+#include "streamline/containers/key_value_pair.fwd.hpp"
 
 #include "streamline/containers/impl/tuple.hpp"
 
@@ -18,6 +19,9 @@ namespace sl {
 		using index_type = index_t;
 	public:
 		using impl::tuple_element<Is, Ts>::operator[]...;
+	public:
+		constexpr operator generic_key_value_pair<_UnusedN, Ts...>() const noexcept
+		requires(sizeof...(Ts) == 2);
 	};
 }
 
@@ -49,3 +53,8 @@ namespace sl {
 #include "streamline/containers/tuple.universal.inl"
 
 
+namespace sl::test {
+	constexpr key_value_pair<int, long> ttop = tuple<int, long>{{1}, {2}};
+	static_assert(ttop.key == 1);
+	static_assert(ttop.value == 2);
+}

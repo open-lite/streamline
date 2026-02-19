@@ -9,8 +9,10 @@
 #include "streamline/containers/array.hpp"
 #include "streamline/containers/impl/seed_or_index.hpp"
 #include "streamline/containers/impl/hash_table.hpp"
-#include "streamline/containers/pair.hpp"
-#include "streamline/functional/comparison.hpp"
+#include "streamline/containers/key_value_pair.hpp"
+#include "streamline/functional/functor/comparison.hpp"
+#include "streamline/functional/functor/identity.hpp"
+#include "streamline/functional/functor/subscript.hpp"
 #include "streamline/metaprogramming/type_traits/relationships.hpp"
 #include "streamline/metaprogramming/type_traits/supported_operations.hpp"
 #include "streamline/numeric/int.hpp"
@@ -18,7 +20,7 @@
 
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	struct generic_lookup_table<N, Key, Value, Hash, KeyEqual> : public array<N, pair<const Key, Value>> {
+	struct generic_lookup_table<N, Key, Value, Hash, KeyEqual> : public array<N, key_value_pair<const Key, Value>> {
 	private:
 		template<typename K>
 		constexpr static bool compatible_key = requires (Hash const& hash, KeyEqual const& key_equal, Key const& key1, K&& key2, index_t const& seed) { 
@@ -29,7 +31,7 @@ namespace sl {
 	public:
 		using key_type        = Key;
 		using mapped_type     = Value;
-		using value_type      = pair<const Key, Value>;
+		using value_type      = key_value_pair<const Key, Value>;
 		using container_type  = array<N, value_type>;
 		using size_type       = typename container_type::size_type;
 		using index_type      = key_type;
@@ -120,16 +122,16 @@ namespace sl {
 		size_t N, typename... Args, typename Key, typename Value, 
 		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = equal_functor
 	>
-	requires traits::tuple_like<TupleLikeT<N, pair<Key, Value>, Args...>>
-	generic_lookup_table(TupleLikeT<N, pair<Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
+	requires traits::tuple_like<TupleLikeT<N, key_value_pair<Key, Value>, Args...>>
+	generic_lookup_table(TupleLikeT<N, key_value_pair<Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
 
 	template<
 		template<size_t, typename...> typename TupleLikeT, 
 		size_t N, typename... Args, typename Key, typename Value, 
 		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = equal_functor
 	>
-	requires traits::tuple_like<TupleLikeT<N, pair<const Key, Value>, Args...>>
-	generic_lookup_table(TupleLikeT<N, pair<const Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
+	requires traits::tuple_like<TupleLikeT<N, key_value_pair<const Key, Value>, Args...>>
+	generic_lookup_table(TupleLikeT<N, key_value_pair<const Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
 
 
 	template<size_t N, traits::pair_like T>
@@ -155,7 +157,7 @@ namespace sl {
 
 
 
-
+#include "streamline/universal/make_deduced.hpp"
 //Placeholder for test suites
 namespace sl::test {
 	constexpr auto arr123 = array<3, const frozen::bits::cvector<unsigned long, 4>>{{
@@ -181,6 +183,8 @@ namespace sl::test {
 	//constexpr impl::hash_table<oof::bucket_count(), typename oof::container_type> dab = sl::impl::make<impl::hash_table<oof::bucket_count(), typename oof::container_type>>(
 	//	yikes, typename oof::hash_type{}, typename oof::key_equal_type{}
 	//); 
+
+	constexpr lookup_table<0, int, array<2, int>> empty{{}};
 	
 	
 	constexpr lookup_table<4, int, array<2, int>> yeet{{{
@@ -251,16 +255,16 @@ namespace sl::test {
 	static_assert(keys[1] == (1259139578135));
 
 
-	constexpr array<4, pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic_array>(
-		array<4, pair<const sl::uint64_t, array<2, empty_t>>>{{
+	constexpr array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic_array>(
+		array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>>{{
 			{0, array<2, empty_t>{}},
 			{1, array<2, empty_t>{}},
 			{2, array<2, empty_t>{}},
 			{3, array<2, empty_t>{}}
 		}}
 	);
-	constexpr array<4, pair<const sl::uint64_t, array<2, empty_t>>> arrm = sl::universal::make<array<4, pair<const sl::uint64_t, array<2, empty_t>>>>(
-		array<4, pair<const sl::uint64_t, array<2, empty_t>>>{{
+	constexpr array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>> arrm = sl::universal::make<array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>>>(
+		array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>>{{
 			{0, array<2, empty_t>{}},
 			{1, array<2, empty_t>{}},
 			{2, array<2, empty_t>{}},
