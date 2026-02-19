@@ -38,10 +38,15 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"diagnostics/unreachable.hpp"
 
 
-	"functional/comparison.hpp"
-	"functional/default_construct_functor.hpp"
-	"functional/generic_stateless_functor.hpp"
-	"functional/identity_function.hpp"
+	"functional/functor/address_of.hpp"
+	"functional/functor/comparison.hpp"
+	"functional/functor/default_construct.hpp"
+	"functional/functor/generic_stateless.hpp"
+	"functional/functor/identity_index.hpp"
+	"functional/functor/identity.hpp"
+	"functional/functor/invoke_each_result.hpp"
+	"functional/functor/invoke_each.hpp"
+	"functional/functor/subscript.hpp"
 	"functional/invoke.hpp"
 
 

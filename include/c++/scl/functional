@@ -1,18 +1,18 @@
 #pragma once
 
 //Comparison Functors
-#include "streamline/functional/comparison.hpp"
+#include "streamline/functional/functor/comparison.hpp"
 namespace std {
 
 
-	using equal_to = sl::equal_functor;
-	using less = sl::less_functor;
+	using equal_to = sl::functor::equal;
+	using less = sl::functor::less;
 }
 
 //Identity functor
-#include "streamline/functional/identity_function.hpp"
+#include "streamline/functional/functor/identity.hpp"
 namespace std {
-	using identity = sl::identity_functor;
+	using identity = sl::functor::identity;
 }
 
 
