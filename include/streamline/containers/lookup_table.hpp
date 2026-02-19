@@ -120,7 +120,7 @@ namespace sl {
 	template<
 		template<size_t, typename...> typename TupleLikeT, 
 		size_t N, typename... Args, typename Key, typename Value, 
-		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = equal_functor
+		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = functor::equal
 	>
 	requires traits::tuple_like<TupleLikeT<N, key_value_pair<Key, Value>, Args...>>
 	generic_lookup_table(TupleLikeT<N, key_value_pair<Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
@@ -128,7 +128,7 @@ namespace sl {
 	template<
 		template<size_t, typename...> typename TupleLikeT, 
 		size_t N, typename... Args, typename Key, typename Value, 
-		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = equal_functor
+		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = functor::equal
 	>
 	requires traits::tuple_like<TupleLikeT<N, key_value_pair<const Key, Value>, Args...>>
 	generic_lookup_table(TupleLikeT<N, key_value_pair<const Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
@@ -200,7 +200,7 @@ namespace sl::test {
 	static_assert(sl::universal::get<1124135>(yeet)[0] == 3);
 
 	using filter = filtered_sequence_t<index_sequence_of_length_type<4>, []<index_t I>(index_constant_type<I>){ return (*(yeet.begin() + I))[second_constant][0] > 4; }>;
-	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic_lookup_table>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic_lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
 		return p.operator[](second_constant)[0];
 	}, filter{})};
 
@@ -218,7 +218,7 @@ namespace sl::test {
 	static_assert(yeet_remastered[1259139578][0] == 7 && yeet_remastered[1259139578][1] == 8);
 	static_assert(sl::get<1124135>(yeet_remastered)[0] == 3);
 
-	constexpr lookup_table<4, int, int> yeet_reborn = make_deduced<generic_lookup_table>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+	constexpr lookup_table<4, int, int> yeet_reborn = make_deduced<generic_lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
 		return p.operator[](second_constant)[0];
 	});
 	static_assert(yeet_reborn[0] == 1);
@@ -228,7 +228,7 @@ namespace sl::test {
 	static_assert(sl::get<1124135>(yeet_reborn) == 3);
 
 	
-	constexpr lookup_table<3, int, int> yeet_reborn_alt = make<lookup_table<3, int, int>>(yeet, identity_tuple_functor<0>{}, []<index_t I>(pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+	constexpr lookup_table<3, int, int> yeet_reborn_alt = make<lookup_table<3, int, int>>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
 		return p.operator[](second_constant)[0];
 	});
 	static_assert(yeet_reborn_alt[0] == 1);
@@ -249,7 +249,7 @@ namespace sl::test {
 	static_assert(doh[static_cast<uint64_t>(1259139578135)].value == 7);
 
 	constexpr array<2, sl::uint64_t> keys = sl::universal::make_deduced<generic_array>(
-		doh, identity_tuple_functor<0>{}, index_sequence<1, 3>
+		doh, functor::subscript<0>{}, index_sequence<1, 3>
 	);
 	static_assert(keys[0] == (1124135));
 	static_assert(keys[1] == (1259139578135));
