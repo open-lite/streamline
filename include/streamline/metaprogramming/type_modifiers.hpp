@@ -93,7 +93,8 @@ namespace sl {
 
 //sign modifiers
 namespace sl {
-
+	template<typename T> struct as_signed : copy_cv<T, typename impl::integer_type_with_size<true, sizeof(typename remove_cv<T>::type)>::type> {};
+	template<typename T> struct as_unsigned : copy_cv<T, typename impl::integer_type_with_size<true, sizeof(typename remove_cv<T>::type)>::type> {};
 }
 
 
@@ -135,4 +136,12 @@ namespace sl {
 	template<typename T> using decay_t = typename decay<T>::type;
 
 	template<typename SrcT, typename DstT> using copy_cvref_t = typename copy_cvref<SrcT, DstT>::type;
+
+
+	//array modifiers
+
+
+	//sign modifiers
+	template<typename T> using as_signed_t = as_signed<T>::type;
+	template<typename T> using as_unsigned_t = as_unsigned<T>::type;
 }

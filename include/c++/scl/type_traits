@@ -124,7 +124,13 @@ namespace std {
 	using sl::add_rvalue_reference_t;
 
 
+	//signage
+	template<typename T> using make_signed   = sl::as_signed<T>;
+	template<typename T> using make_signed_t = sl::as_signed_t<T>;
+	template<typename T> using make_unsigned   = sl::as_unsigned<T>;
+	template<typename T> using make_unsigned_t = sl::as_unsigned_t<T>;
 
+	
 	//pointers
 	using sl::add_pointer;
 	using sl::remove_pointer;
