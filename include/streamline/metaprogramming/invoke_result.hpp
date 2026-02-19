@@ -29,7 +29,7 @@ namespace sl {
 	namespace impl {
 		template<typename FnT, typename TupleT, index_t I>
 		constexpr bool has_invoke_result = requires {
-			typename invoke_result<FnT, typename tuple_traits<TupleT>::template type_of_element<I>, index_constant_type<I>>::type;
+			typename invoke_result<FnT, typename tuple_traits<remove_cvref_t<TupleT>>::template type_of_element<I>, index_constant_type<I>>::type;
 		};
 
 		template<typename FnT, typename TupleT, typename>
@@ -38,13 +38,13 @@ namespace sl {
 		};
 
 		template<typename FnT, typename TupleT, index_t... Is> requires (has_invoke_result<FnT, TupleT, Is> && ...)
-		struct invoke_each_result<FnT, TupleT, index_sequence_type<Is...>> : common_type<typename invoke_result<FnT, typename tuple_traits<TupleT>::template type_of_element<Is>, index_constant_type<Is>>::type...> {
-			constexpr static bool __is_noexcept = (invoke_result<FnT, typename tuple_traits<TupleT>::template type_of_element<Is>, index_constant_type<Is>>::__is_noexcept && ...);
+		struct invoke_each_result<FnT, TupleT, index_sequence_type<Is...>> : common_type<typename invoke_result<FnT, typename tuple_traits<remove_cvref_t<TupleT>>::template type_of_element<Is>, index_constant_type<Is>>::type...> {
+			constexpr static bool __is_noexcept = (invoke_result<FnT, typename tuple_traits<remove_cvref_t<TupleT>>::template type_of_element<Is>, index_constant_type<Is>>::__is_noexcept && ...);
 		};
 	}
 
 	template<typename FnT, typename TupleT>
-	using invoke_each_result = impl::invoke_each_result<FnT, TupleT, index_sequence_of_length_type<tuple_traits<TupleT>::size>>;
+	using invoke_each_result = impl::invoke_each_result<FnT, TupleT, index_sequence_of_length_type<tuple_traits<remove_cvref_t<TupleT>>::size>>;
 }
 
 namespace sl {
