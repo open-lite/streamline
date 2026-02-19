@@ -19,8 +19,8 @@ namespace sl {
 
 namespace sl {
 	template<typename LikeT, typename ArgT> [[gnu::always_inline, nodiscard]]
-	constexpr copy_cvref_t<LikeT&&, ArgT&&> forward_like(ArgT&& arg) noexcept {
-		return static_cast<copy_cvref_t<LikeT&&, ArgT&&>>(arg);
+	constexpr copy_cvref_t<LikeT&&, ArgT> forward_like(ArgT&& arg) noexcept {
+		return static_cast<copy_cvref_t<LikeT&&, ArgT>>(arg);
 	}
 }
 
