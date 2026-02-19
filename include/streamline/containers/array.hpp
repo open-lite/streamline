@@ -214,7 +214,12 @@ constexpr int func() noexcept {
 	}
 
 	{
-	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{1, 2});
+	static_assert(sl::traits::is_invocable_each_v<sl::functor::identity&&, sl::tuple<int, int>&&>);
+	using R0 = typename sl::invoke_result<sl::functor::identity&&, typename sl::tuple_traits<sl::remove_cvref_t<sl::tuple<int, int>&&>>::template type_of_element<0>, sl::index_constant_type<0>>::type;
+	using R1 = typename sl::invoke_result<sl::functor::identity&&, typename sl::tuple_traits<sl::remove_cvref_t<sl::tuple<int, int>&&>>::template type_of_element<1>, sl::index_constant_type<1>>::type;
+	using C = typename sl::common_type<R0, R1>::type;
+	using RE = sl::invoke_each_result_t<sl::functor::identity&&, sl::tuple<int, int>&&>;
+	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{{1}, {2}});
 	constexpr auto sz = arr_from_tuple.size();
 	constexpr auto arr1 = arr_from_tuple[0];
 	constexpr auto arr2 = arr_from_tuple[1];
