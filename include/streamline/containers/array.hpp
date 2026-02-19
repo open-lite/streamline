@@ -139,7 +139,7 @@ struct yuck {};
 using x = sl::tuple<int, int>;
 using y = sl::tuple_traits<x>;
 constexpr bool z = sl::traits::is_tuple_like_v<x>;
-constexpr auto t = x{1, 2};
+constexpr auto t = x{{1}, {2}};
 constexpr auto w2 = sl::get<0>(t);
 constexpr auto w3 = sl::get<0>(const_cast<x&>(t));
 constexpr auto w1 = sl::get<0>(x{{1}, {2}});
@@ -169,6 +169,9 @@ namespace sl::test {
 	};
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedef"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 constexpr int func() noexcept {
 	sl::array<3, int> arr{1, 2, 3};
 	constexpr static const sl::array<3, long> carr{{1, 2, 3}};
@@ -218,16 +221,16 @@ constexpr int func() noexcept {
 	}
 
 	{
-	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{1, 2}, [](auto&& val, auto seq) noexcept {return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
+	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{{1}, {2}}, [](auto&& val, auto seq) noexcept {return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
 	static_assert(arr_from_tuple.size() == 2);
 	static_assert(arr_from_tuple[0] == 1);
 	static_assert(arr_from_tuple[1] == 3);
 	}
 
 	{
-	constexpr static sl::tuple<int, int, int, int> t{1, 2, 3, 4};
+	constexpr static sl::tuple<int, int, int, int> t{{1}, {2}, {3}, {4}};
 	using filter = sl::filtered_sequence_t<sl::index_sequence_of_length_type<4>, []<sl::index_t I>(sl::index_constant_type<I>){ return t[sl::index_constant<I>] % 2 == 0; }>;
-	constexpr auto filtered_arr_from_tuple = sl::make_deduced<sl::array>(t, sl::identity_functor{}, filter{});
+	constexpr auto filtered_arr_from_tuple = sl::make_deduced<sl::array>(t, sl::functor::identity{}, filter{});
 	static_assert(filtered_arr_from_tuple.size() == 2);
 	static_assert(filtered_arr_from_tuple[0] == 2);
 	static_assert(filtered_arr_from_tuple[1] == 4);
@@ -235,3 +238,4 @@ constexpr int func() noexcept {
 
 	return 0;
 }
+#pragma GCC diagnostic pop
