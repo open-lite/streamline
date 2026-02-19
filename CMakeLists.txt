@@ -121,6 +121,7 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"new"
 	"functional"
 	"initializer_list"
+	"iosfwd"
 	"limits"
 	"memory"
 	"stdexcept"
