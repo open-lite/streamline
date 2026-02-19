@@ -2,10 +2,7 @@
 
 
 #if !defined(_INITIALIZER_LIST) && !defined(_LIBCPP_INITIALIZER_LIST)
-#define _INITIALIZER_LIST
-#define _LIBCPP_INITIALIZER_LIST
 
-#include "streamline/diagnostics/result.hpp"
 #include "streamline/numeric/int.hpp"
 
 
@@ -47,8 +44,6 @@ namespace std {
 	//Element access
 	public:
 		constexpr const_reference_type at(index_type pos) const noexcept;
-
-		constexpr sl::result<const_reference_type> try_at(index_type pos) const noexcept;
 
 		constexpr const_reference_type operator[](index_type pos) const noexcept;
 

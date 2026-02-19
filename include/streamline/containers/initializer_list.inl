@@ -15,13 +15,6 @@ namespace std {
 
 	
 	template<typename T>
-	constexpr sl::result<typename initializer_list<T>::const_reference_type>
-	initializer_list<T>::try_at(index_type pos) const noexcept {
-		//TODO:
-	}
-
-	
-	template<typename T>
 	constexpr typename initializer_list<T>::const_reference_type
 	initializer_list<T>::operator[](index_type pos) const noexcept {
 		return _ptr[pos];
