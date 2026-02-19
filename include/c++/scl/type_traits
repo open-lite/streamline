@@ -23,6 +23,11 @@ namespace std {
 	template<typename T> using is_enum = is_enumeration<T>;
 	template<typename T> constexpr bool is_enum_v = is_enumeration_v<T>;
 
+	template<typename T> using is_const = is_const_qualified<T>;
+	template<typename T> constexpr bool is_const_v = is_const_qualified_v<T>;
+
+	template<typename T> using is_volatile = is_volatile_qualified<T>;
+	template<typename T> constexpr bool is_volatile_v = is_volatile_qualified_v<T>;
 	
 	template<typename T> using is_signed = is_signed_arithmetic<T>;
 	template<typename T> constexpr bool is_signed_v = is_signed_arithmetic_v<T>;
