@@ -27,20 +27,7 @@ namespace sl {
 
 namespace sl {
 	template<typename RealT> [[gnu::always_inline, nodiscard]]
-	constexpr auto&& forward_as_lvalue(remove_reference_t<RealT>& t) noexcept {
-		if constexpr (!traits::is_lvalue_reference_v<RealT>)
-			return static_cast<remove_cvref_t<RealT> const&>(t);
-		else 
-			return forward<RealT>(t);
-	}
-
-	template<typename RealT> [[gnu::always_inline, nodiscard]]
-	constexpr auto&& forward_as_lvalue(remove_reference_t<RealT>&& t) noexcept {
-		if constexpr (!traits::is_lvalue_reference_v<RealT>)
-			return static_cast<remove_cvref_t<RealT> const&>(t);
-		else {
-			static_assert(traits::is_const_qualified_v<remove_reference_t<RealT>>, "Can not forward a rvalue as a non-const lvalue.");
-			return forward<RealT>(t);
-		}
+	constexpr remove_reference_t<RealT>& forward_as_lvalue(remove_reference_t<RealT>& t) noexcept {
+		return static_cast<remove_reference_t<RealT>&>(t);
 	}
 }

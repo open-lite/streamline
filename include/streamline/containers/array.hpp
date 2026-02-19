@@ -185,7 +185,7 @@ constexpr int func() noexcept {
 
 	auto ar = sl::forward_as_lvalue<sl::array<3 ,int>>(arr)._data;
 	auto car = sl::forward_as_lvalue<sl::array<3 ,long> const&&>(carr)._data;
-	auto mar = sl::forward_as_lvalue<sl::array<3 ,int>&&>(sl::array<3, int>{})._data;
+	//auto mar = sl::forward_as_lvalue<sl::array<3 ,int>&&>(sl::array<3, int>{})._data; //error
 	auto cmar = sl::forward_as_lvalue<sl::array<3 ,long> const&&>(move(carr))._data;
 
 	auto&& i = arr[0];
