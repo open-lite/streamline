@@ -100,6 +100,7 @@ namespace std {
 #include <streamline/metaprogramming/type_modifiers.hpp>
 #include <streamline/metaprogramming/type_identity.hpp>
 #include <streamline/metaprogramming/conditional.hpp>
+#include <streamline/metaprogramming/underlying_type.hpp>
 #include <streamline/metaprogramming/common_type.hpp>
 namespace std {
 	//const-volatility specifiers
@@ -152,6 +153,7 @@ namespace std {
 	template<typename T> struct enable_if<true, T> : sl::type_identity<T> {};
 	using sl::conditional;
 	using sl::common_type;
+	using sl::underlying_type;
 	using sl::invoke_result;
 	using sl::type_identity;
 
@@ -161,6 +163,7 @@ namespace std {
 	template<bool B, typename T = void> using enable_if_t = typename enable_if<B,T>::type;
 	using sl::conditional_t;
 	using sl::common_type_t;
+	using sl::underlying_type_t;
 	using sl::invoke_result_t;
 	using sl::type_identity_t;
 }
