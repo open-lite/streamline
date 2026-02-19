@@ -105,6 +105,7 @@ set(${PROJECT_NAME}_STD_HEADER_FILES
 	"cassert"
 	"cstddef"
 	"cstdint"
+	"cstdio"
 	"cstdlib"
 	"new"
 	"functional"
