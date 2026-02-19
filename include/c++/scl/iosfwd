@@ -1,0 +1,7 @@
+#pragma once
+
+
+namespace std {
+	template<typename>
+	class char_traits;
+}
