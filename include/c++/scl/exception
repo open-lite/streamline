@@ -1,0 +1,56 @@
+#pragma once
+#include "streamline/diagnostics/terminate.hpp"
+#include "streamline/metaprogramming/type_traits/isolated_categories.hpp"
+#include "streamline/metaprogramming/type_traits/relationships.hpp"
+
+
+namespace std {
+	struct exception {
+		constexpr virtual ~exception() = default;
+		constexpr virtual const char* what() const noexcept { return ""; }
+	};
+
+
+	struct bad_exception : public exception {};
+
+
+	struct nested_exception {
+		constexpr virtual ~nested_exception() = default;
+
+		// access functions
+		[[noreturn]] constexpr void rethrow_nested() const { sl::terminate(); }
+		constexpr void* nested_ptr() const noexcept { return nullptr; }
+	};
+}
+
+
+namespace std {
+	using sl::terminate_handler;
+	using sl::get_terminate;
+	using sl::set_terminate;
+	using sl::terminate;	
+}
+
+
+namespace std {
+	constexpr int uncaught_exceptions() noexcept { return 0; }
+}
+
+
+namespace std {
+	using exception_ptr = void*;
+	
+	constexpr exception_ptr current_exception() noexcept { return nullptr; }
+	[[noreturn]] constexpr void rethrow_exception(exception_ptr) { sl::terminate(); }
+	template<class E> constexpr exception_ptr make_exception_ptr(E e) noexcept { return &e; }
+
+	template<class T> [[noreturn]] constexpr void throw_with_nested(T&&) { sl::terminate(); }
+	template<class E> constexpr void rethrow_if_nested(const E& e) {
+		if constexpr(sl::traits::is_polymorphic_v<E> && (
+			!sl::traits::is_base_of_v<nested_exception, E> || 
+            sl::traits::is_convertible_from_v<E*, nested_exception*>
+		))
+			if (auto p = dynamic_cast<nested_exception const*>(&e))
+    			p->rethrow_nested();
+	}
+}

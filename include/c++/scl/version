@@ -150,8 +150,8 @@
 //#undef  __cpp_lib_constexpr_dynamic_alloc
 //#define __cpp_lib_constexpr_dynamic_alloc 201907L
 
-//#undef  __cpp_lib_constexpr_exceptions
-//#define __cpp_lib_constexpr_exceptions 202502L
+#undef  __cpp_lib_constexpr_exceptions
+#define __cpp_lib_constexpr_exceptions 202502L
 
 //#undef  __cpp_lib_constexpr_flat_map
 //#define __cpp_lib_constexpr_flat_map 202502L
@@ -828,8 +828,8 @@
 //#undef  __cpp_lib_type_trait_variable_templates
 //#define __cpp_lib_type_trait_variable_templates 201510L
 
-//#undef  __cpp_lib_uncaught_exceptions
-//#define __cpp_lib_uncaught_exceptions 201411L
+#undef  __cpp_lib_uncaught_exceptions
+#define __cpp_lib_uncaught_exceptions 201411L
 
 //#undef  __cpp_lib_unordered_map_try_emplace
 //#define __cpp_lib_unordered_map_try_emplace 201411L
