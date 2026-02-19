@@ -284,7 +284,7 @@ namespace sl::test {
 	};
 	constexpr bool bucketable = sl::traits::is_makeable_from_v<array<0, bucket_ref_type>, decltype(buckets), decltype(make_ref)>;
 	//static_assert(traits::is_invocable_each_r_v<bucket_ref_type, decltype(make_ref), const array<0, bucket_type>&>);
-	//using x = sl::invoke_each_result_t<decltype(make_ref), const array<0, bucket_type>&>;
+	//using x = sl::invoke_each_return_type_t<decltype(make_ref), const array<0, bucket_type>&>;
 	//using y = common_type_t<>;
 	constexpr auto bucket_array = sl::make<array<0, bucket_ref_type>>(buckets, make_ref);
 

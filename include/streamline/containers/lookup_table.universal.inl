@@ -68,8 +68,8 @@ namespace sl {
 		traits::is_noexcept_invocable_each_v<XfrmEachToValueFn, Arg&&>
 	) {
 		return impl::make_lookup_table_from_container<lookup_table<tuple_traits<XfrmSeq>::size, 
-			remove_cvref_t<invoke_each_result_t<XfrmEachToKeyFn, Arg&&>>,
-			remove_cvref_t<invoke_each_result_t<XfrmEachToValueFn, Arg&&>>
+			remove_cvref_t<invoke_each_return_type_t<XfrmEachToKeyFn, Arg&&>>,
+			remove_cvref_t<invoke_each_return_type_t<XfrmEachToValueFn, Arg&&>>
 		>>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
 	}
 }

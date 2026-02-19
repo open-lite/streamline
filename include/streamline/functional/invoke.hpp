@@ -1,5 +1,5 @@
 #pragma once
-#include "streamline/metaprogramming/invoke_result.hpp"
+#include "streamline/metaprogramming/invoke_return_type.hpp"
 #include "streamline/metaprogramming/type_traits/relationships.hpp"
 
 
@@ -7,7 +7,7 @@
 namespace sl {
 	template<typename Fn, typename... Args>
 	requires traits::is_invocable_v<Fn, Args...>
-	constexpr invoke_result_t<Fn, Args...> invoke(Fn&& fn, Args&&... args) 
+	constexpr invoke_return_type_t<Fn, Args...> invoke(Fn&& fn, Args&&... args) 
 	noexcept(traits::is_noexcept_invocable_v<Fn, Args...>) {
 		return __builtin_invoke(forward<Fn>(fn), forward<Args>(args)...);
 	}
@@ -25,5 +25,5 @@ namespace sl {
 }
 
 #else 
-#error TODO: invoke_result when __builtin_invoke is not present
+#error TODO: invoke_return_type when __builtin_invoke is not present
 #endif

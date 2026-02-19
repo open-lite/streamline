@@ -110,6 +110,7 @@ namespace std {
 #include <streamline/metaprogramming/conditional.hpp>
 #include <streamline/metaprogramming/underlying_type.hpp>
 #include <streamline/metaprogramming/common_type.hpp>
+#include <streamline/metaprogramming/invoke_return_type.hpp>
 namespace std {
 	//const-volatility specifiers
 	using sl::remove_const;
@@ -162,7 +163,7 @@ namespace std {
 	using sl::conditional;
 	using sl::common_type;
 	using sl::underlying_type;
-	using sl::invoke_result;
+	template<typename FnT, typename... ArgTs> using invoke_result = sl::invoke_return_type<FnT, ArgTs...>;
 	using sl::type_identity;
 
 
@@ -172,7 +173,7 @@ namespace std {
 	using sl::conditional_t;
 	using sl::common_type_t;
 	using sl::underlying_type_t;
-	using sl::invoke_result_t;
+	template<typename FnT, typename... ArgTs> using invoke_result_t = sl::invoke_return_type_t<FnT, ArgTs...>;
 	using sl::type_identity_t;
 }
 

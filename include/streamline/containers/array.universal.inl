@@ -67,7 +67,7 @@ namespace sl {
 	)
 	constexpr auto make_deduced(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>)
 	noexcept(traits::is_noexcept_invocable_each_v<XfrmEachFn&&, Arg&&>) {
-		return impl::make_array_from_container<array<XfrmSeq::size(), remove_cvref_t<invoke_each_result_t<XfrmEachFn&&, Arg&&>>>>(
+		return impl::make_array_from_container<array<XfrmSeq::size(), remove_cvref_t<invoke_each_return_type_t<XfrmEachFn&&, Arg&&>>>>(
 			sl::forward<Arg>(array_ish), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq
 		);
 	}
@@ -86,7 +86,7 @@ namespace sl {
 	)
 	constexpr auto make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {})
 	noexcept(traits::is_noexcept_invocable_v<XfrmEachFn&&, Arg&&, index_constant_type<0>>) {
-		return impl::make_array_from_value<array<XfrmSeq::size(), remove_cvref_t<invoke_result_t<XfrmEachFn&&, Arg&&, index_constant_type<0>>>>>(
+		return impl::make_array_from_value<array<XfrmSeq::size(), remove_cvref_t<invoke_return_type_t<XfrmEachFn&&, Arg&&, index_constant_type<0>>>>>(
 			sl::forward<Arg>(value), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq
 		);
 	}

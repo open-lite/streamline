@@ -1,6 +1,6 @@
 #pragma once
 #include "streamline/metaprogramming/integral_constant.hpp"
-#include "streamline/metaprogramming/invoke_result.hpp"
+#include "streamline/metaprogramming/invoke_return_type.hpp"
 
 #include "streamline/metaprogramming/impl/relationships.hpp"
 
@@ -68,46 +68,46 @@ namespace sl::traits {
 
 	template<typename FnT, typename... ArgTs> 
 	struct is_invocable : bool_constant_type<requires { 
-		typename invoke_result_t<FnT, ArgTs...>; 
+		typename invoke_return_type_t<FnT, ArgTs...>; 
 	}>{};
 
 	template<typename FnT, typename... ArgTs> 
 	struct is_noexcept_invocable : bool_constant_type<is_invocable<FnT, ArgTs...>::value && requires { 
-		requires invoke_result<FnT, ArgTs...>::__is_noexcept;
+		requires invoke_return_type<FnT, ArgTs...>::__is_noexcept;
 	}>{};
 
 
 	template<typename R, typename FnT, typename... ArgTs> 
 	struct is_invocable_r : bool_constant_type<is_invocable<FnT, ArgTs...>::value && requires { 
-		requires is_convertible_to<invoke_result_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
+		requires is_convertible_to<invoke_return_type_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
 	}>{};
 
 	template<typename R, typename FnT, typename... ArgTs>
 	struct is_noexcept_invocable_r : bool_constant_type<is_noexcept_invocable<FnT, ArgTs...>::value && requires {
-		requires is_noexcept_convertible_to<invoke_result_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
+		requires is_noexcept_convertible_to<invoke_return_type_t<FnT, ArgTs...>, R>::value || is_same_as<R, void>::value;
 	}>{};
 
 	
 
 	template<typename FnT, typename TupleLikeT> 
 	struct is_invocable_each : bool_constant_type<requires { 
-		typename invoke_each_result<FnT, TupleLikeT>::type; 
+		typename invoke_each_return_type<FnT, TupleLikeT>::type; 
 	}>{};
 
 	template<typename FnT, typename TupleLikeT> 
 	struct is_noexcept_invocable_each : bool_constant_type<is_invocable_each<FnT, TupleLikeT>::value && requires { 
-		requires invoke_each_result<FnT, TupleLikeT>::__is_noexcept;
+		requires invoke_each_return_type<FnT, TupleLikeT>::__is_noexcept;
 	}>{};
 
 
 	template<typename R, typename FnT, typename TupleLikeT> 
 	struct is_invocable_each_r : bool_constant_type<is_invocable_each<FnT, TupleLikeT>::value && requires { 
-		requires is_convertible_to<invoke_each_result_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
+		requires is_convertible_to<invoke_each_return_type_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
 	}>{};
 
 	template<typename R, typename FnT, typename TupleLikeT> 
 	struct is_noexcept_invocable_each_r : bool_constant_type<is_noexcept_invocable_each<FnT, TupleLikeT>::value && requires { 
-		requires is_noexcept_convertible_to<invoke_each_result_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
+		requires is_noexcept_convertible_to<invoke_each_return_type_t<FnT, TupleLikeT>, R>::value || is_same_as<R, void>::value;
 	}>{};
 }
 
