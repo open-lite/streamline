@@ -6,6 +6,7 @@
 #include "streamline/containers/impl/seed_or_index.hpp"
 #include "streamline/numeric/int.hpp"
 #include "streamline/containers/array.hpp"
+#include "streamline/universal/make.hpp"
 
 
 namespace sl::impl {
@@ -19,7 +20,8 @@ namespace sl::impl {
         array<storage_size, index_t> _idx_table;
 
 	public:
-		constexpr hash_table(ContainerT const& contents, HashT const& hash, KeyEqualT const& key_equal) noexcept : 
+		constexpr hash_table(ContainerT const& contents, HashT const& hash, KeyEqualT const& key_equal) noexcept 
+		requires (storage_size != 0) : 
 			_seed{},
 			_seed_table{sl::universal::make<array<storage_size, impl::seed_or_index>>(impl::seed_or_index{false, container_type::size()}, in_place_repeat_tag<container_type::size()>)},
 			_idx_table{sl::universal::make<array<storage_size, index_t>>(container_type::size(), in_place_repeat_tag<container_type::size()>)}
@@ -55,27 +57,27 @@ namespace sl::impl {
 			}
 
 			#ifndef NDEBUG
-			for(bucket_type const& bucket : buckets)
-				for(std::size_t i = 1; i < bucket.size(); ++i)
-					constexpr_assert(!key_equal(contents[0][first_constant], contents[i][first_constant]), "unique keys");
+			for (index_t i = 0; i < buckets.size(); ++i)
+				for(std::size_t j = 1; j < buckets[i].size(); ++j)
+					constexpr_assert(!key_equal(contents[0][first_constant], contents[j][first_constant]), "unique keys");
 			#endif
 
 			frozen::bits::quicksort(bucket_refs.begin(), bucket_refs.end() - 1, frozen::bits::bucket_size_compare{});
 
 			// Step 3: Map the items in buckets into hash tables.
-			for (bucket_ref_type const& bucket_ref : bucket_refs) {
-				const size_t bsize = bucket_ref.size();
+			for (index_t i = 0; i < bucket_refs.size(); ++i) {
+				const size_t bsize = bucket_refs[i].size();
 
 				switch(bsize) {
 				case 1:
-					_seed_table[bucket_ref.hash] = {false, static_cast<index_t>(bucket_ref[0])};
+					_seed_table[bucket_refs[i].hash] = {false, static_cast<index_t>(bucket_refs[i][0])};
 					break;
 				default:
 					impl::seed_or_index d{true, prg()};
 					frozen::bits::cvector<index_t, bucket_size> bucket_slots;
 
 					while (bucket_slots.size() < bsize) {
-						auto slot = hash(contents[bucket_ref[bucket_slots.size()]][first_constant], static_cast<index_t>(d.value)) % storage_size;
+						auto slot = hash(contents[bucket_refs[i][bucket_slots.size()]][first_constant], static_cast<index_t>(d.value)) % storage_size;
 
 						if (_idx_table[slot] != container_type::size() || !frozen::bits::all_different_from(bucket_slots, slot)) {
 							bucket_slots.clear();
@@ -88,12 +90,19 @@ namespace sl::impl {
 
 					// Put successful seed in G, and put indices to items in their slots
 					// assert(bucket.hash == hash(key(items[bucket[0]]), step_one.seed) % M);
-					_seed_table[bucket_ref.hash] = d;
-					for (std::size_t i = 0; i < bsize; ++i)
-						_idx_table[bucket_slots[i]] = bucket_ref[i];
+					_seed_table[bucket_refs[i].hash] = d;
+					for (std::size_t j = 0; j < bsize; ++j)
+						_idx_table[bucket_slots[j]] = bucket_refs[i][j];
 					break;
 				}
 			}
 		}
+
+
+		constexpr hash_table(ContainerT const&, HashT const&, KeyEqualT const&) noexcept 
+		requires (storage_size == 0) :
+			_seed{},
+			_seed_table{},
+			_idx_table{} {}
 	};
 }
