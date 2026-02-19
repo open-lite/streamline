@@ -29,6 +29,39 @@ namespace std {
 	
 	template<typename T> using is_unsigned = is_unsigned_arithmetic<T>;
 	template<typename T> constexpr bool is_unsigned_v = is_unsigned_arithmetic_v<T>;
+
+
+	template<typename T, typename... Args> using is_constructible = is_constructible_from<T, Args...>;
+	template<typename T, typename... Args> constexpr bool is_constructible_v = is_constructible_from_v<T, Args...>;
+	template<typename T, typename... Args> using is_trivially_constructible = is_trivially_constructible_from<T, Args...>;
+	template<typename T, typename... Args> constexpr bool is_trivially_constructible_v = is_trivially_constructible_from_v<T, Args...>;
+	template<typename T, typename... Args> using is_nothrow_constructible = is_noexcept_constructible_from<T, Args...>;
+	template<typename T, typename... Args> constexpr bool is_nothrow_constructible_v = is_noexcept_constructible_from_v<T, Args...>;
+
+	template<typename T> using is_nothrow_default_constructible = is_noexcept_default_constructible<T>;
+	template<typename T> constexpr bool is_nothrow_default_constructible_v = is_noexcept_default_constructible_v<T>;
+
+	template<typename T> using is_nothrow_copy_constructible = is_noexcept_copy_constructible<T>;
+	template<typename T> constexpr bool is_nothrow_copy_constructible_v = is_noexcept_copy_constructible_v<T>;
+
+	template<typename T> using is_nothrow_move_constructible = is_noexcept_move_constructible<T>;
+	template<typename T> constexpr bool is_nothrow_move_constructible_v = is_noexcept_move_constructible_v<T>;
+
+	template<typename T, typename Arg> using is_assignable = is_assignable_from<T, Arg>;
+	template<typename T, typename Arg> constexpr bool is_assignable_v = is_assignable_from_v<T, Arg>;
+	template<typename T, typename Arg> using is_trivially_assignable = is_trivially_assignable_from<T, Arg>;
+	template<typename T, typename Arg> constexpr bool is_trivially_assignable_v = is_trivially_assignable_from_v<T, Arg>;
+	template<typename T, typename Arg> using is_nothrow_assignable = is_noexcept_assignable_from<T, Arg>;
+	template<typename T, typename Arg> constexpr bool is_nothrow_assignable_v = is_noexcept_assignable_from_v<T, Arg>;
+
+	template<typename T> using is_nothrow_copy_assignable = is_noexcept_copy_assignable<T>;
+	template<typename T> constexpr bool is_nothrow_copy_assignable_v = is_noexcept_copy_assignable_v<T>;
+
+	template<typename T> using is_nothrow_move_assignable = is_noexcept_move_assignable<T>;
+	template<typename T> constexpr bool is_nothrow_move_assignable_v = is_noexcept_move_assignable_v<T>;
+
+	template<typename T> using is_nothrow_destructible = is_noexcept_destructible<T>;
+	template<typename T> constexpr bool is_nothrow_destructible_v = is_noexcept_destructible_v<T>;
 }
 
 

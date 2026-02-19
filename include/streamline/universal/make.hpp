@@ -1,6 +1,7 @@
 #pragma once
 #include "streamline/metaprogramming/forward.hpp"
 #include "streamline/metaprogramming/in_place.hpp"
+#include "streamline/metaprogramming/type_traits/supported_operations.hpp"
 
 
 namespace sl::universal {
@@ -8,17 +9,20 @@ namespace sl::universal {
 		template<typename T>
 		struct make_adl {
 			template<typename... Args>
-			constexpr decltype(auto) operator()(Args&&... args) const noexcept
-			requires requires { {make<T>(forward<Args>(args)...)} noexcept; }  {
-				return make<T>(forward<Args>(args)...);
+			constexpr decltype(auto) operator()(Args&&... args) const 
+			noexcept(sl::traits::is_noexcept_makeable_from_v<T, Args...>) 
+			requires(sl::traits::is_makeable_from_v<T, Args...>) {
+				return make<T>(sl::forward<Args>(args)...);
 			}
 
 			template<typename... Args>
-			constexpr decltype(auto) operator()(Args&&... args) const noexcept requires ( 
-				!requires { {make<T>(forward<Args>(args)...)} noexcept; } &&
-				requires { {make<T>(forward<Args>(args)..., in_place_adl_tag<T>)} noexcept; }
+			constexpr decltype(auto) operator()(Args&&... args) const 
+			noexcept(sl::traits::is_noexcept_adl_makeable_from_v<T, Args...>) 
+			requires(
+				!sl::traits::is_makeable_from_v<T, Args...> && 
+				sl::traits::is_adl_makeable_from_v<T, Args...>
 			) {
-				return make<T>(forward<Args>(args)..., in_place_adl_tag<T>);
+				return make<T>(sl::forward<Args>(args)..., in_place_adl_tag<T>);
 			}
 		};
 	}
