@@ -225,6 +225,13 @@ constexpr int func() noexcept {
 	constexpr auto arr1 = sl::move(immoble_arr[0]);
 	constexpr auto arr2 = sl::move(immoble_arr[1]);
 	}
+	
+	{
+	constexpr auto immoble_arr = sl::make<sl::array<5, int>>(sl::in_place_tag, 5);
+	constexpr auto sz = immoble_arr.size();
+	constexpr auto arr1 = sl::move(immoble_arr[0]);
+	constexpr auto arr2 = sl::move(immoble_arr[1]);
+	}
 
 	{
 	static_assert(sl::traits::is_invocable_each_v<sl::functor::identity&&, sl::tuple<int, int>&&>);

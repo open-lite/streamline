@@ -42,7 +42,7 @@ namespace sl {
 		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, Arg&&> &&
 		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, Arg&&>
 	)) {
-		return impl::make_lookup_table_from_container<R>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
+		return impl::make_lookup_table_from_container<remove_cvref_t<R>>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
 	}
 }
 

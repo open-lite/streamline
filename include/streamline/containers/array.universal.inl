@@ -3,6 +3,7 @@
 
 #include "streamline/containers/impl/make_from_container.hpp"
 #include "streamline/containers/impl/make_from_value.hpp"
+#include "streamline/containers/impl/make_in_place.hpp"
 
 
 namespace sl {
@@ -18,8 +19,19 @@ namespace sl {
 }
 
 
-
 namespace sl {
+	//TODO: normalize make functions by having the tag always be the second template argument
+	template<
+		traits::specialization_of<generic_array> R,
+		typename... Args
+	> 
+	requires(traits::is_constructible_from_v<typename remove_cvref_t<R>::value_type, Args&&...>)
+	constexpr remove_cvref_t<R> make(in_place_tag_type, Args&&... args)
+	noexcept(traits::is_noexcept_constructible_from_v<typename remove_cvref_t<R>::value_type, Args&&...>) {
+		return impl::make_array_in_place<remove_cvref_t<R>>(sl::index_sequence_of_length<tuple_traits<R>::size>, sl::forward<Args>(args)...);
+	}
+
+
 	template<
 		traits::specialization_of<generic_array> R,
 		typename Arg,
@@ -33,7 +45,7 @@ namespace sl {
 	)
 	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>)
 	noexcept(XfrmSeq::size() == 0 || traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&>) {
-		return impl::make_array_from_container<R>(sl::forward<Arg>(array_ish), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
+		return impl::make_array_from_container<remove_cvref_t<R>>(sl::forward<Arg>(array_ish), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 
 
@@ -47,7 +59,7 @@ namespace sl {
 	requires traits::is_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&, index_constant_type<0>>
 	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {})
 	noexcept(traits::is_noexcept_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&, index_constant_type<0>>) {
-		return impl::make_array_from_value<R>(sl::forward<Arg>(value), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
+		return impl::make_array_from_value<remove_cvref_t<R>>(sl::forward<Arg>(value), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 }
 

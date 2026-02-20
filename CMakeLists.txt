@@ -17,6 +17,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/impl/hash_table.hpp"
 	"containers/impl/make_from_container.hpp"
 	"containers/impl/make_from_value.hpp"
+	"containers/impl/make_in_place.hpp"
 	"containers/impl/seed_or_index.hpp"
 	"containers/impl/tuple.hpp"
 
