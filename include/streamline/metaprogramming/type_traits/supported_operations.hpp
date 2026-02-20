@@ -134,20 +134,20 @@ namespace sl::traits {
 	struct is_noexcept_gettable_using_member : bool_constant_type<requires (T&& t) { {sl::forward<T>(t).template get<I>()} noexcept; }> {};
    
 
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     struct is_deduced_makeable_from : bool_constant_type<requires (Args&&... args) {
 		{ make_deduced<T>(sl::forward<Args>(args)...) };
 	}> {};
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     struct is_noexcept_deduced_makeable_from : bool_constant_type<requires (Args&&... args) {
 		{ make_deduced<T>(sl::forward<Args>(args)...) } noexcept;
 	}> {};
 
-	template<template<size_t, typename...> typename T, typename... Args>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     struct is_adl_deduced_makeable_from : bool_constant_type<requires (Args&&... args) {
 		{ make_deduced<T>(sl::forward<Args>(args)..., in_place_container_adl_tag<T>) };
 	}> {};
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     struct is_noexcept_adl_deduced_makeable_from : bool_constant_type<requires (Args&&... args) {
 		{ make_deduced<T>(sl::forward<Args>(args)..., in_place_container_adl_tag<T>) } noexcept;
 	}> {};
@@ -293,13 +293,13 @@ namespace sl::traits {
 	constexpr bool is_noexcept_gettable_using_member_v = is_noexcept_gettable_using_member<T, I>::value;
 
 	
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     constexpr bool is_deduced_makeable_from_v = is_deduced_makeable_from<T, Args...>::value;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     constexpr bool is_noexcept_deduced_makeable_from_v = is_noexcept_deduced_makeable_from<T, Args...>::value;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     constexpr bool is_adl_deduced_makeable_from_v = is_adl_deduced_makeable_from<T, Args...>::value;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     constexpr bool is_noexcept_adl_deduced_makeable_from_v = is_noexcept_adl_deduced_makeable_from<T, Args...>::value;
 
 	template<typename T, typename... Args>
@@ -423,13 +423,13 @@ namespace sl::traits {
 	template<typename T, auto I>
 	concept noexcept_gettable_using_member = is_noexcept_gettable_using_member<T, I>::value;
 
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     concept deduced_makeable_from = is_deduced_makeable_from_v<T, Args...>;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     concept noexcept_deduced_makeable_from = is_noexcept_deduced_makeable_from_v<T, Args...>;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     concept adl_deduced_makeable_from = is_adl_deduced_makeable_from_v<T, Args...>;
-    template<template<size_t, typename...> typename T, typename... Args>
+    template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T, typename... Args>
     concept noexcept_adl_deduced_makeable_from = is_noexcept_adl_deduced_makeable_from_v<T, Args...>;
 
 	template<typename T, typename... Args>

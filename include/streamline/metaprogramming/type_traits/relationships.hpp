@@ -9,8 +9,8 @@ namespace sl::traits {
 	template<typename T, typename U>
 	struct is_same_as : impl::is_same_as<T, U> {};
 
-	template<template<size_t, typename...> typename ContainerT, template<size_t, typename...> typename ContainerU, size_t N, typename... Ts>
-	struct is_same_container_as : is_same_as<ContainerT<N, Ts...>, ContainerU<N, Ts...>> {};
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerT, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerU, typename... Ts>
+	struct is_same_container_as : is_same_as<ContainerT<Ts...>, ContainerU<Ts...>> {};
 
 
 	template<typename T, typename... Us>
@@ -61,7 +61,7 @@ namespace sl::traits {
 
 
 
-	template<typename T, template<size_t, typename...> typename TemplateT>
+	template<typename T, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename TemplateT>
 	struct is_specialization_of : impl::is_specialization_of<remove_cvref_t<T>, TemplateT> {};
 
 
@@ -117,8 +117,8 @@ namespace sl::traits {
 	template<typename T, typename U>
 	constexpr bool is_same_as_v = is_same_as<T, U>::value;
 
-	template<template<size_t, typename...> typename ContainerT, template<size_t, typename...> typename ContainerU, size_t N, typename... Ts>
-	constexpr bool is_same_container_as_v = is_same_container_as<ContainerT, ContainerU, N, Ts...>::value;
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerT, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerU, typename... Ts>
+	constexpr bool is_same_container_as_v = is_same_container_as<ContainerT, ContainerU, Ts...>::value;
 
 	template<typename T, typename... Us>
 	constexpr bool are_all_same_as_v = are_all_same_as<T, Us...>::value;
@@ -145,7 +145,7 @@ namespace sl::traits {
 	constexpr bool is_noexcept_convertible_from_v = is_noexcept_convertible_from<To, From>::value;
 
 
-    template<typename T, template<size_t, typename...> typename TemplateT>
+    template<typename T, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename TemplateT>
 	constexpr bool is_specialization_of_v = is_specialization_of<T, TemplateT>::value;
 
 
@@ -176,8 +176,8 @@ namespace sl::traits {
 	template<typename T, typename U>
 	concept same_as = is_same_as_v<T, U>;
 
-	template<template<size_t, typename...> typename ContainerT, template<size_t, typename...> typename ContainerU, size_t N, typename... Ts>
-	concept same_container_as = is_same_container_as_v<ContainerT, ContainerU, N, Ts...>;
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerT, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename ContainerU, typename... Ts>
+	concept same_container_as = is_same_container_as_v<ContainerT, ContainerU, Ts...>;
 
 	template<typename T, typename... Us>
 	concept all_same_as = are_all_same_as_v<T, Us...>;
@@ -206,7 +206,7 @@ namespace sl::traits {
 	concept noexcept_convertible_from = is_noexcept_convertible_from_v<From, To>;
 
 
-    template<typename T, template<size_t, typename...> typename TemplateT>
+    template<typename T, template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename TemplateT>
 	concept specialization_of = is_specialization_of_v<T, TemplateT>;
 
 

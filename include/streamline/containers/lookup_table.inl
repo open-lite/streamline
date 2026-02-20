@@ -6,7 +6,7 @@
 namespace sl {
 	// template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	// template<typename ContainerT, typename HashT, typename KeyEqualT>
-	// constexpr generic_lookup_table<N, Key, Value, Hash, KeyEqual>::generic_lookup_table(ContainerT&& contents, HashT&& hash, KeyEqualT&& equal) noexcept 
+	// constexpr generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::generic_lookup_table(ContainerT&& contents, HashT&& hash, KeyEqualT&& equal) noexcept 
 	// requires 
 	// traits::makeable_from<container_type, ContainerT> && 
 	// traits::forwaded_noexcept_constructible_from<hasher, HashT> && 
@@ -18,7 +18,7 @@ namespace sl {
 
 	// template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	// template<typename HashT, typename KeyEqualT>
-	// constexpr generic_lookup_table<N, Key, Value, Hash, KeyEqual>::generic_lookup_table(initializer_list<value_type> il, HashT&& hash, KeyEqualT&& equal) noexcept 
+	// constexpr generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::generic_lookup_table(initializer_list<value_type> il, HashT&& hash, KeyEqualT&& equal) noexcept 
 	// requires
 	// traits::forwaded_noexcept_constructible_from<hash_type, HashT> && 
 	// traits::forwaded_noexcept_constructible_from<key_equal_type, KeyEqualT> : 
@@ -32,7 +32,7 @@ namespace sl {
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr auto&& generic_lookup_table<N, Key, Value, Hash, KeyEqual>::at(this auto&& self, K&& key) noexcept requires compatible_key<K> {
+	constexpr auto&& generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::at(this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		auto it = self.find(forward<K>(key));
 		if (it != self.end()) return forward_like<decltype(self)>(it->second);
 		terminate();
@@ -40,13 +40,13 @@ namespace sl {
 	
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr auto generic_lookup_table<N, Key, Value, Hash, KeyEqual>::try_at(this auto&& self, K&& key) noexcept requires compatible_key<K> {
+	constexpr auto generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::try_at(this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		//TODO
 	}
 	
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr auto&& generic_lookup_table<N, Key, Value, Hash, KeyEqual>::operator[](this auto&& self, K&& key) noexcept requires compatible_key<K> {
+	constexpr auto&& generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::operator[](this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		auto it = self.find(forward<K>(key));
 		return forward_like<decltype(self)>(it->operator[](second_constant));
 	}
@@ -55,7 +55,7 @@ namespace sl {
 
 	template<size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<auto I>
-	constexpr auto&& generic_lookup_table<N, Key, Value, Hash, KeyEqual>::get(this auto&& self) noexcept requires compatible_key<decltype(I)> {
+	constexpr auto&& generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::get(this auto&& self) noexcept requires compatible_key<decltype(I)> {
 		return forward_like<decltype(self)>(self.operator[](I));
 	}
 }
@@ -63,14 +63,14 @@ namespace sl {
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr size_t generic_lookup_table<N, Key, Value, Hash, KeyEqual>::count(K&& key) const noexcept requires compatible_key<K> {
+	constexpr size_t generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::count(K&& key) const noexcept requires compatible_key<K> {
 		return static_cast<size_t>(this->find(forward<K>(key)) != this->end());
 	}
 
 	
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr auto generic_lookup_table<N, Key, Value, Hash, KeyEqual>::find(this auto&& self, K&& key) noexcept requires compatible_key<K> {
+	constexpr auto generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::find(this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		const index_t pos = self.lookup(key);
 		auto it = forward_as_lvalue<decltype(self)>(self).begin() + pos;
 
@@ -81,7 +81,7 @@ namespace sl {
 
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr bool generic_lookup_table<N, Key, Value, Hash, KeyEqual>::contains(K&& key) const noexcept requires compatible_key<K> {
+	constexpr bool generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::contains(K&& key) const noexcept requires compatible_key<K> {
 		return this->find(forward<K>(key)) != this->end();
 	}
 }
@@ -89,7 +89,7 @@ namespace sl {
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
-	constexpr auto generic_lookup_table<N, Key, Value, Hash, KeyEqual>::equal_range(this auto&& self, K&& key) noexcept requires compatible_key<K> {
+	constexpr auto generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::equal_range(this auto&& self, K&& key) noexcept requires compatible_key<K> {
 		const auto it = forward_as_lvalue<decltype(self)>(self).find(key);
 		if (it != forward_as_lvalue<decltype(self)>(self).end()) return make_pair(it, it + 1);
 		return make_pair(forward_as_lvalue<decltype(self)>(self).end(), forward_as_lvalue<decltype(self)>(self).end());
@@ -100,13 +100,13 @@ namespace sl {
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	consteval size_t
-	generic_lookup_table<N, Key, Value, Hash, KeyEqual>::bucket_count() noexcept {
+	generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::bucket_count() noexcept {
 		return hash_table_type::storage_size;
 	}
 	
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	consteval size_t
-	generic_lookup_table<N, Key, Value, Hash, KeyEqual>::max_bucket_count() noexcept {
+	generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::max_bucket_count() noexcept {
 		return hash_table_type::storage_size;
 	}
 }
@@ -114,12 +114,12 @@ namespace sl {
 
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	constexpr auto generic_lookup_table<N, Key, Value, Hash, KeyEqual>::hash_function(this auto&& self) noexcept {
+	constexpr auto generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::hash_function(this auto&& self) noexcept {
 		return forward_as_lvalue<decltype(self)>(self)._hash;
 	}
 	
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	constexpr auto generic_lookup_table<N, Key, Value, Hash, KeyEqual>::key_eq(this auto&& self) noexcept {
+	constexpr auto generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::key_eq(this auto&& self) noexcept {
 		return forward_as_lvalue<decltype(self)>(self)._key_equal;
 	}
 }
@@ -128,7 +128,7 @@ namespace sl {
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template <typename K>
-	constexpr index_t generic_lookup_table<N, Key, Value, Hash, KeyEqual>::lookup(K const& key) const noexcept {
+	constexpr index_t generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::lookup(K const& key) const noexcept {
 		auto const d = _table._seed_table[_hash(key, _table._seed) % hash_table_type::storage_size];
 
 		if (!d.is_seed())

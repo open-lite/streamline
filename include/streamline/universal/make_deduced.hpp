@@ -6,7 +6,7 @@
 
 namespace sl::universal {
 	namespace impl {
-		template<template<size_t, typename...> typename T>
+		template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 		struct make_deduced_adl {
 			template<typename... Args>
 			constexpr decltype(auto) operator()(Args&&... args) const 
@@ -27,6 +27,6 @@ namespace sl::universal {
 		};
 	}
 
-	template<template<size_t, typename...> typename T>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 	inline constexpr impl::make_deduced_adl<T> make_deduced{};
 }

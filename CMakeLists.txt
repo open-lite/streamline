@@ -38,6 +38,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/tuple.hpp"
 	"containers/tuple.inl"
 	"containers/tuple.universal.inl"
+	"containers/generic_container_template_args.def.hpp"
 
 
 	"diagnostics/abort.hpp"

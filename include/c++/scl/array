@@ -7,15 +7,15 @@ namespace std {
 }
 
 
-#include "streamline/universal/make_deduced.hpp"
+#include "streamline/universal/make.hpp"
 namespace std {
 	template<typename T, size_t N>
 	constexpr std::array<sl::remove_cv_t<T>, N> to_array(T (&a)[N] ) {
-		return sl::universal::make_deduced<sl::generic_array>(a);
+		return sl::universal::make<std::array<sl::remove_cv_t<T>, N>>(a);
 	}
 
 	template<typename T, size_t N>
 	constexpr std::array<sl::remove_cv_t<T>, N> to_array(T (&&a)[N] ) {
-		return sl::universal::make_deduced<sl::generic_array>(sl::move(a));
+		return sl::universal::make<std::array<sl::remove_cv_t<T>, N>>(sl::move(a));
 	}
 }

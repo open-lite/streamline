@@ -9,11 +9,11 @@
 
 
 namespace sl {
-	template<size_t, typename...>
+	template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()>
 	struct generic_key_value_pair;
 
-	template<size_t _UnusedN, typename KeyT, typename ValueT>
-	struct generic_key_value_pair<_UnusedN, KeyT, ValueT> {
+	template<typename KeyT, typename ValueT>
+	struct generic_key_value_pair<KeyT, ValueT> {
 		using index_type = index_t;
 	public:
 		[[no_unique_address]] KeyT key;

@@ -12,7 +12,7 @@ namespace sl {
 	}
 
 	template<size_t N, typename T>
-	constexpr void swap(generic_array<N, T>& lhs, generic_array<N, T>& rhs) noexcept(noexcept(lhs.swap(rhs))) {
+	constexpr void swap(array<N, T>& lhs, array<N, T>& rhs) noexcept(noexcept(lhs.swap(rhs))) {
 		return lhs.swap(rhs);
 	}
 }
@@ -53,7 +53,7 @@ namespace sl {
 
 namespace sl {
 	template<
-		template<size_t, typename...> typename R,
+		template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename R,
 		typename Arg,
 		typename XfrmEachFn = functor::identity,
 		typename XfrmSeq = index_sequence_of_length_type<tuple_traits<remove_cvref_t<Arg>>::size>,
@@ -63,7 +63,7 @@ namespace sl {
 		XfrmSeq::size() > 0 &&
 		traits::is_tuple_like_v<RawArg> &&
 		traits::is_invocable_each_v<XfrmEachFn&&, Arg&&> &&
-		traits::same_container_as<R, generic_array, tuple_traits<XfrmSeq>::size, placeholder_t>
+		traits::same_container_as<R, generic_array, sl::size_constant_type<tuple_traits<XfrmSeq>::size>, placeholder_t>
 	)
 	constexpr auto make_deduced(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>)
 	noexcept(traits::is_noexcept_invocable_each_v<XfrmEachFn&&, Arg&&>) {
@@ -74,7 +74,7 @@ namespace sl {
 	
 
 	template<
-		template<size_t, typename...> typename R, 
+		template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename R, 
 		typename Arg, 
 		size_t N, 
 		typename XfrmEachFn = functor::identity,
@@ -82,7 +82,7 @@ namespace sl {
 	>
 	requires (
 		traits::is_invocable_v<XfrmEachFn&&, Arg&&, index_constant_type<0>> &&
-		traits::same_container_as<R, generic_array, N, placeholder_t>
+		traits::same_container_as<R, generic_array, sl::size_constant_type<N>, placeholder_t>
 	)
 	constexpr auto make_deduced(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {})
 	noexcept(traits::is_noexcept_invocable_v<XfrmEachFn&&, Arg&&, index_constant_type<0>>) {

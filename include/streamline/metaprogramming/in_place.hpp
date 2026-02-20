@@ -1,5 +1,6 @@
 #pragma once
 #include "streamline/numeric/int.hpp"
+#include "streamline/containers/generic_container_template_args.def.hpp"
 
 namespace sl {
 	struct in_place_tag_type { 
@@ -17,7 +18,7 @@ namespace sl {
 		constexpr explicit in_place_adl_tag_type() = default;
 	};
 
-	template<template<size_t, typename...> typename T>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 	struct in_place_container_adl_tag_type { 
 		constexpr explicit in_place_container_adl_tag_type() = default;
 	};
@@ -33,7 +34,7 @@ namespace sl {
 		constexpr explicit in_place_type_type() = default;
 	};
 
-	template<template<size_t, typename...> typename T>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 	struct in_place_container_type_type {
 		constexpr explicit in_place_container_type_type() = default;
 	};
@@ -49,7 +50,7 @@ namespace sl {
 	template<typename T>
 	constexpr in_place_adl_tag_type<T> in_place_adl_tag{};
 
-	template<template<size_t, typename...> typename T>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 	constexpr in_place_container_adl_tag_type<T> in_place_container_adl_tag{};
 
 
@@ -59,6 +60,6 @@ namespace sl {
 	template<typename T>
 	constexpr in_place_type_type<T> in_place_type{};
 
-	template<template<size_t, typename...> typename T>
+	template<template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename T>
 	constexpr in_place_container_type_type<T> in_place_container_type{};
 }

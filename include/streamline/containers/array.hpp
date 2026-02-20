@@ -15,7 +15,7 @@
 
 namespace sl {
 	template<size_t N, typename T>
-	struct generic_array<N, T> {
+	struct generic_array<sl::size_constant_type<N>, T> {
 		using value_type      = T;
 		using size_type       = sl::size_t;
 		using index_type      = sl::index_t;
@@ -89,10 +89,10 @@ namespace sl {
 	//Operations
 	public:
 		template<typename V>
-		generic_array<N, T>& fill(V&& val) noexcept;
+		generic_array& fill(V&& val) noexcept;
 
 		template<typename V>
-		generic_array<N, T>& swap(generic_array<N, T>& other)
+		generic_array& swap(generic_array& other)
 		noexcept(N == 0 || sl::traits::is_noexcept_swappable_v<T>); //TODO
 	
 	//Equality
@@ -218,7 +218,7 @@ constexpr int func() noexcept {
 	//constexpr auto z = move(carr).end();
 
 	{
-	constexpr auto immoble_arr = sl::make_deduced<sl::array>(sl::test::move_only(5), sl::in_place_repeat_tag<5>, []<sl::index_t I>(auto&& p, sl::index_constant_type<I>) noexcept {
+	constexpr auto immoble_arr = sl::make_deduced<sl::generic_array>(sl::test::move_only(5), sl::in_place_repeat_tag<5>, []<sl::index_t I>(auto&& p, sl::index_constant_type<I>) noexcept {
 		return p.value + I;
 	});
 	constexpr auto sz = immoble_arr.size();
@@ -232,14 +232,14 @@ constexpr int func() noexcept {
 	using R1 = typename sl::invoke_return_type<sl::functor::identity&&, typename sl::tuple_traits<sl::remove_cvref_t<sl::tuple<int, int>&&>>::template type_of_element<1>, sl::index_constant_type<1>>::type;
 	using C = typename sl::common_type<R0, R1>::type;
 	using RE = sl::invoke_each_return_type_t<sl::functor::identity&&, sl::tuple<int, int>&&>;
-	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{{1}, {2}});
+	constexpr auto arr_from_tuple = sl::make_deduced<sl::generic_array>(x{{1}, {2}});
 	constexpr auto sz = arr_from_tuple.size();
 	constexpr auto arr1 = arr_from_tuple[0];
 	constexpr auto arr2 = arr_from_tuple[1];
 	}
 
 	{
-	constexpr auto arr_from_tuple = sl::make_deduced<sl::array>(x{{1}, {2}}, [](auto&& val, auto seq) noexcept {return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
+	constexpr auto arr_from_tuple = sl::make_deduced<sl::generic_array>(x{{1}, {2}}, [](auto&& val, auto seq) noexcept {return static_cast<decltype(val)>(val + static_cast<sl::index_t>(seq)); });
 	static_assert(arr_from_tuple.size() == 2);
 	static_assert(arr_from_tuple[0] == 1);
 	static_assert(arr_from_tuple[1] == 3);
@@ -248,7 +248,7 @@ constexpr int func() noexcept {
 	{
 	constexpr static sl::tuple<int, int, int, int> t{{1}, {2}, {3}, {4}};
 	using filter = sl::filtered_sequence_t<sl::index_sequence_of_length_type<4>, []<sl::index_t I>(sl::index_constant_type<I>){ return t[sl::index_constant<I>] % 2 == 0; }>;
-	constexpr auto filtered_arr_from_tuple = sl::make_deduced<sl::array>(t, sl::functor::identity{}, filter{});
+	constexpr auto filtered_arr_from_tuple = sl::make_deduced<sl::generic_array>(t, sl::functor::identity{}, filter{});
 	static_assert(filtered_arr_from_tuple.size() == 2);
 	static_assert(filtered_arr_from_tuple[0] == 2);
 	static_assert(filtered_arr_from_tuple[1] == 4);

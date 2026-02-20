@@ -48,7 +48,7 @@ namespace sl {
 
 namespace sl {
 	template<
-		template<size_t, typename...> typename R,
+		template<SL_GENERIC_CONTAINER_TEMPLATE_ARGS()> typename R,
 		typename Arg,
 		typename XfrmEachToKeyFn = functor::subscript<0>,
 		typename XfrmEachToValueFn = functor::subscript<1>,
@@ -60,7 +60,7 @@ namespace sl {
 		traits::is_tuple_like_v<RawArg> &&
 		traits::is_invocable_each_v<XfrmEachToKeyFn, Arg&&> &&
 		traits::is_invocable_each_v<XfrmEachToValueFn, Arg&&> &&
-		traits::same_container_as<R, generic_lookup_table, tuple_traits<XfrmSeq>::size, int, placeholder_t>
+		traits::same_container_as<R, generic_lookup_table, sl::size_constant_type<tuple_traits<XfrmSeq>::size>, int, placeholder_t>
 	)
 	constexpr auto make_deduced(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_container_adl_tag_type<R> = in_place_container_adl_tag<R>)
 	noexcept(

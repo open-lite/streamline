@@ -14,13 +14,13 @@
 #include "streamline/containers/impl/tuple.hpp"
 
 namespace sl {
-	template<size_t _UnusedN, index_t... Is, typename... Ts>
-	struct generic_tuple<_UnusedN, index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
+	template<index_t... Is, typename... Ts>
+	struct generic_tuple<index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
 		using index_type = index_t;
 	public:
 		using impl::tuple_element<Is, Ts>::operator[]...;
 	public:
-		constexpr operator generic_key_value_pair<_UnusedN, Ts...>() const noexcept
+		constexpr operator generic_key_value_pair<Ts...>() const noexcept
 		requires(sizeof...(Ts) == 2);
 	};
 }

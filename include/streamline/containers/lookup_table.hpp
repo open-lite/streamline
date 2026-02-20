@@ -20,7 +20,7 @@
 
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	struct generic_lookup_table<N, Key, Value, Hash, KeyEqual> : public array<N, key_value_pair<const Key, Value>> {
+	struct generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual> : public array<N, key_value_pair<const Key, Value>> {
 	private:
 		template<typename K>
 		constexpr static bool compatible_key = requires (Hash const& hash, KeyEqual const& key_equal, Key const& key1, K&& key2, index_t const& seed) { 
@@ -115,31 +115,6 @@ namespace sl {
 	};
 }
 
-
-namespace sl {
-	template<
-		template<size_t, typename...> typename TupleLikeT, 
-		size_t N, typename... Args, typename Key, typename Value, 
-		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = functor::equal
-	>
-	requires traits::tuple_like<TupleLikeT<N, key_value_pair<Key, Value>, Args...>>
-	generic_lookup_table(TupleLikeT<N, key_value_pair<Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
-
-	template<
-		template<size_t, typename...> typename TupleLikeT, 
-		size_t N, typename... Args, typename Key, typename Value, 
-		typename Hash = algo::lookup_table_hash<Key>, typename KeyEqual = functor::equal
-	>
-	requires traits::tuple_like<TupleLikeT<N, key_value_pair<const Key, Value>, Args...>>
-	generic_lookup_table(TupleLikeT<N, key_value_pair<const Key, Value>, Args...>, Hash, KeyEqual) -> generic_lookup_table<N, Key, Value, Hash, KeyEqual>;
-
-
-	template<size_t N, traits::pair_like T>
-	using lookup_table_from_pair_type = lookup_table<N, 
-		remove_const_t<typename tuple_traits<T>::template type_of_element<0>>,
-		typename tuple_traits<T>::template type_of_element<1>
-	>;
-}
 
 namespace sl {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
