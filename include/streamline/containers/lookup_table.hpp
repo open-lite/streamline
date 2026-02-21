@@ -18,9 +18,9 @@
 #include "streamline/numeric/int.hpp"
 
 
-namespace sl {
+namespace sl::generic {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
-	struct generic_lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual> : public array<N, key_value_pair<const Key, Value>> {
+	struct lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual> : public array<sl::size_constant_type<N>, key_value_pair<const Key, Value>> {
 	private:
 		template<typename K>
 		constexpr static bool compatible_key = requires (Hash const& hash, KeyEqual const& key_equal, Key const& key1, K&& key2, index_t const& seed) { 
@@ -32,7 +32,7 @@ namespace sl {
 		using key_type        = Key;
 		using mapped_type     = Value;
 		using value_type      = key_value_pair<const Key, Value>;
-		using container_type  = array<N, value_type>;
+		using container_type  = array<sl::size_constant_type<N>, value_type>;
 		using size_type       = typename container_type::size_type;
 		using index_type      = key_type;
 		using difference_type = typename container_type::difference_type;
@@ -71,17 +71,17 @@ namespace sl {
 
 
 	public:
-		//constexpr generic_lookup_table() noexcept = default;
+		//constexpr lookup_table() noexcept = default;
 
 	public:
 		// template<typename ContainerT, typename HashT = hash_type, typename KeyEqualT = key_equal_type>
-		// constexpr generic_lookup_table(ContainerT&& contents, HashT&& hash = HashT{}, KeyEqualT&& equal = KeyEqualT{}) noexcept requires 
+		// constexpr lookup_table(ContainerT&& contents, HashT&& hash = HashT{}, KeyEqualT&& equal = KeyEqualT{}) noexcept requires 
 		// traits::makeable_from<container_type, ContainerT> && 
 		// traits::forwaded_noexcept_constructible_from<hash_type, HashT> && 
 		// traits::forwaded_noexcept_constructible_from<key_equal_type, KeyEqualT>;
 
 		// template<typename HashT = hash_type, typename KeyEqualT = key_equal_type>
-		// constexpr generic_lookup_table(initializer_list<value_type> il, HashT&& hash = HashT{}, KeyEqualT&& equal = KeyEqualT{}) noexcept requires 
+		// constexpr lookup_table(initializer_list<value_type> il, HashT&& hash = HashT{}, KeyEqualT&& equal = KeyEqualT{}) noexcept requires 
 		// traits::forwaded_noexcept_constructible_from<hash_type, HashT> && 
 		// traits::forwaded_noexcept_constructible_from<key_equal_type, KeyEqualT>;
 
@@ -133,6 +133,7 @@ namespace sl {
 
 
 #include "streamline/universal/make_deduced.hpp"
+#include "streamline/universal/get.hpp"
 //Placeholder for test suites
 namespace sl::test {
 	constexpr auto arr123 = array<3, const frozen::bits::cvector<unsigned long, 4>>{{
@@ -175,32 +176,32 @@ namespace sl::test {
 	static_assert(sl::universal::get<1124135>(yeet)[0] == 3);
 
 	using filter = filtered_sequence_t<index_sequence_of_length_type<4>, []<index_t I>(index_constant_type<I>){ return (*(yeet.begin() + I))[second_constant][0] > 4; }>;
-	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic_lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+	constexpr lookup_table<filter::size(), int, int> yeet_filtered{make_deduced<generic::lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
 		return p.operator[](second_constant)[0];
 	}, filter{})};
 
 	static_assert(yeet_filtered[212351] == 5);
 	static_assert(yeet_filtered[1259139578] == 7);
-	static_assert(sl::get<212351>(yeet_filtered) == 5);
+	static_assert(sl::universal::get<212351>(yeet_filtered) == 5);
 
 
 
 
-	constexpr lookup_table<4, int, array<2, int>> yeet_remastered = make_deduced<generic_lookup_table>(yeet);
+	constexpr lookup_table<4, int, array<2, int>> yeet_remastered = make_deduced<generic::lookup_table>(yeet);
 	static_assert(yeet_remastered[0][0] == 1          && yeet_remastered[0][1] == 2);
 	static_assert(yeet_remastered[1124135][0] == 3    && yeet_remastered[1124135][1] == 4);
 	static_assert(yeet_remastered[212351][0] == 5     && yeet_remastered[212351][1] == 6);
 	static_assert(yeet_remastered[1259139578][0] == 7 && yeet_remastered[1259139578][1] == 8);
-	static_assert(sl::get<1124135>(yeet_remastered)[0] == 3);
+	static_assert(sl::universal::get<1124135>(yeet_remastered)[0] == 3);
 
-	constexpr lookup_table<4, int, int> yeet_reborn = make_deduced<generic_lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
+	constexpr lookup_table<4, int, int> yeet_reborn = make_deduced<generic::lookup_table>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
 		return p.operator[](second_constant)[0];
 	});
 	static_assert(yeet_reborn[0] == 1);
 	static_assert(yeet_reborn[1124135] == 3);
 	static_assert(yeet_reborn[212351] == 5);
 	static_assert(yeet_reborn[1259139578] == 7);
-	static_assert(sl::get<1124135>(yeet_reborn) == 3);
+	static_assert(sl::universal::get<1124135>(yeet_reborn) == 3);
 
 	
 	constexpr lookup_table<3, int, int> yeet_reborn_alt = make<lookup_table<3, int, int>>(yeet, functor::subscript<0>{}, []<index_t I>(key_value_pair<const int, array<2, int>> p, index_constant_type<I>) noexcept -> int {
@@ -209,7 +210,7 @@ namespace sl::test {
 	static_assert(yeet_reborn_alt[0] == 1);
 	static_assert(yeet_reborn_alt[1124135] == 3);
 	static_assert(yeet_reborn_alt[212351] == 5);
-	static_assert(sl::get<1124135>(yeet_reborn_alt) == 3);
+	static_assert(sl::universal::get<1124135>(yeet_reborn_alt) == 3);
 
 
 	constexpr lookup_table<4, sl::uint64_t, immoble> doh{{{
@@ -223,14 +224,14 @@ namespace sl::test {
 	static_assert(doh[static_cast<uint64_t>(212351)].value == 5);
 	static_assert(doh[static_cast<uint64_t>(1259139578135)].value == 7);
 
-	constexpr array<2, sl::uint64_t> keys = sl::universal::make_deduced<generic_array>(
+	constexpr array<2, sl::uint64_t> keys = sl::universal::make_deduced<generic::array>(
 		doh, functor::subscript<0>{}, index_sequence<1, 3>
 	);
 	static_assert(keys[0] == (1124135));
 	static_assert(keys[1] == (1259139578135));
 
 
-	constexpr array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic_array>(
+	constexpr array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>> arrr = sl::universal::make_deduced<generic::array>(
 		array<4, key_value_pair<const sl::uint64_t, array<2, empty_t>>>{{
 			{0, array<2, empty_t>{}},
 			{1, array<2, empty_t>{}},

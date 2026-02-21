@@ -13,14 +13,20 @@
 
 #include "streamline/containers/impl/tuple.hpp"
 
-namespace sl {
+namespace sl::generic {
 	template<index_t... Is, typename... Ts>
-	struct generic_tuple<index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
+	struct tuple<index_sequence_type<Is...>, Ts...> : impl::tuple_element<Is, Ts>... {
 		using index_type = index_t;
 	public:
 		using impl::tuple_element<Is, Ts>::operator[]...;
+		using impl::tuple_element<Is, Ts>::get...;
 	public:
-		constexpr operator generic_key_value_pair<Ts...>() const noexcept
+		template<index_t I>
+		constexpr auto&& get(this auto&& self) noexcept;
+		template<typename T>
+		constexpr auto&& get(this auto&& self) noexcept;
+	public:
+		constexpr operator key_value_pair<Ts...>() const noexcept
 		requires(sizeof...(Ts) == 2);
 	};
 }
@@ -50,7 +56,6 @@ namespace sl {
 
 
 #include "streamline/containers/tuple.inl"
-#include "streamline/containers/tuple.universal.inl"
 
 
 namespace sl::test {

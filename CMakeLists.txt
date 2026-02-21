@@ -34,11 +34,9 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/key_value_pair.fwd.hpp"
 	"containers/key_value_pair.hpp"
 	"containers/key_value_pair.inl"
-	"containers/key_value_pair.universal.inl"
 	"containers/tuple.fwd.hpp"
 	"containers/tuple.hpp"
 	"containers/tuple.inl"
-	"containers/tuple.universal.inl"
 	"containers/generic_container_template_args.def.hpp"
 
 
