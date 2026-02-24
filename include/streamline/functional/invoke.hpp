@@ -1,4 +1,5 @@
 #pragma once
+#include "streamline/metaprogramming/forward.hpp"
 #include "streamline/metaprogramming/invoke_return_type.hpp"
 #include "streamline/metaprogramming/type_traits/relationships.hpp"
 
@@ -9,7 +10,7 @@ namespace sl {
 	requires traits::is_invocable_v<Fn, Args...>
 	constexpr invoke_return_type_t<Fn, Args...> invoke(Fn&& fn, Args&&... args) 
 	noexcept(traits::is_noexcept_invocable_v<Fn, Args...>) {
-		return __builtin_invoke(forward<Fn>(fn), forward<Args>(args)...);
+		return __builtin_invoke(sl::forward<Fn>(fn), sl::forward<Args>(args)...);
 	}
 
 
@@ -18,9 +19,9 @@ namespace sl {
 	constexpr R invoke_r(Fn&& fn, Args&&... args) 
 	noexcept(traits::is_noexcept_invocable_r_v<R, Fn, Args...>) {
 		if constexpr (traits::is_same_as_v<void, remove_cv_t<R>>)
-			invoke(forward<Fn>(fn), forward<Args>(args)...);
+			invoke(sl::forward<Fn>(fn), sl::forward<Args>(args)...);
 		else
-			return invoke(forward<Fn>(fn), forward<Args>(args)...);
+			return invoke(sl::forward<Fn>(fn), sl::forward<Args>(args)...);
 	}
 }
 
