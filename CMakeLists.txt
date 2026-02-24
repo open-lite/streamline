@@ -97,6 +97,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"metaprogramming/type_identity.hpp"
 	"metaprogramming/type_modifiers.hpp"
 	"metaprogramming/type_of_pack_element.hpp"
+	"metaprogramming/underlying_type.hpp"
 
 
 	"numeric/impl/numeric_traits_base.hpp"
