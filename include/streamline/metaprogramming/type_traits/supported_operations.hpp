@@ -121,6 +121,14 @@ namespace sl::traits {
 	struct is_noexcept_destructible : bool_constant_type<__is_nothrow_destructible(T)> {};
 }
 
+namespace sl::traits {
+	template <typename To, typename From>
+	struct does_reference_convert_from_temporary : bool_constant_type<__reference_converts_from_temporary(To, From)> {};
+
+	template <typename To, typename From>
+	struct does_reference_construct_from_temporary : bool_constant_type<__reference_constructs_from_temporary(To, From)> {};
+}
+
 
 namespace sl::traits {
 	template<typename T, auto I>
@@ -271,7 +279,6 @@ namespace sl::traits {
 	constexpr bool is_noexcept_fully_movable_v  = is_noexcept_fully_movable<T>::value;
 }
 
-
 namespace sl::traits {
 	template<typename T>
 	constexpr bool is_destructible_v           = is_destructible<T>::value;
@@ -279,6 +286,13 @@ namespace sl::traits {
 	constexpr bool is_trivially_destructible_v = is_trivially_destructible<T>::value;
 	template<typename T>
 	constexpr bool is_noexcept_destructible_v  = is_noexcept_destructible<T>::value;
+}
+
+namespace sl::traits {
+	template<typename To, typename From>
+	constexpr bool does_reference_convert_from_temporary_v   = does_reference_convert_from_temporary<To, From>::value;
+	template<typename To, typename From>
+	constexpr bool does_reference_construct_from_temporary_v = does_reference_construct_from_temporary<To, From>::value;
 }
 
 
@@ -410,6 +424,13 @@ namespace sl::traits {
 	concept trivially_destructible = is_trivially_destructible_v<T>;
 	template<typename T>
 	concept noexcept_destructible  = is_noexcept_destructible_v<T>;
+}
+
+namespace sl::traits {
+	template<typename To, typename From>
+	concept reference_converts_from_temporary   = does_reference_convert_from_temporary<To, From>::value;
+	template<typename To, typename From>
+	concept reference_constructs_from_temporary = does_reference_construct_from_temporary<To, From>::value;
 }
 
 

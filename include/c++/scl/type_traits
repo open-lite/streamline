@@ -75,6 +75,11 @@ namespace std {
 
 	template<typename T> using is_nothrow_destructible = is_noexcept_destructible<T>;
 	template<typename T> constexpr bool is_nothrow_destructible_v = is_noexcept_destructible_v<T>;
+
+	template<typename T, typename U> using reference_constructs_from_temporary = does_reference_construct_from_temporary<T, U>;
+	template<typename T, typename U> constexpr bool reference_constructs_from_temporary_v = does_reference_construct_from_temporary_v<T, U>;
+	template<typename T, typename U> using reference_converts_from_temporary = does_reference_convert_from_temporary<T, U>;
+	template<typename T, typename U> constexpr bool reference_converts_from_temporary_v = does_reference_convert_from_temporary_v<T, U>;
 }
 
 
