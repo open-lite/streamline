@@ -15,6 +15,12 @@ namespace sl::traits {
 	template<typename T> struct is_enumeration : bool_constant_type<__is_enum(T)> {};
 	
 	template<typename T> struct is_function : bool_constant_type<__is_function(T)> {};
+	
+	template<typename T> struct is_pointer : false_constant_type {};
+	template<typename T> struct is_pointer<T*               > : true_constant_type {};
+	template<typename T> struct is_pointer<T* const         > : true_constant_type {};
+	template<typename T> struct is_pointer<T*       volatile> : true_constant_type {};
+	template<typename T> struct is_pointer<T* const volatile> : true_constant_type {};
 }
 
 
@@ -78,6 +84,9 @@ namespace sl::traits {
 	template<typename T>
 	constexpr bool is_function_v = is_function<T>::value;
 
+	template<typename T>
+	constexpr bool is_pointer_v = is_pointer<T>::value;
+
 
 	template<typename T>
 	constexpr bool is_object_v = is_object<T>::value;
@@ -138,6 +147,9 @@ namespace sl::traits {
 
 	template<typename T>
 	concept function = is_function_v<T>;
+
+	template<typename T>
+	concept pointer = is_pointer_v<T>;
 
 
 	template<typename T>
