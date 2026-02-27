@@ -10,7 +10,7 @@ namespace sl {
 		using type = constant_type<T, V>;
 	public:
 		consteval operator value_type() const noexcept { return value; }
-    	consteval value_type operator()() const noexcept { return value; }
+    	consteval value_type operator()(auto&&...) const noexcept { return value; }
 	};
 }
 
