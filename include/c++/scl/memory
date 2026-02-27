@@ -6,3 +6,9 @@ namespace std {
 	using sl::start_lifetime_as;
 	using sl::start_lifetime_as_array;
 }
+
+//Helper classes 
+#include "streamline/functional/functor/default_delete.hpp"
+namespace std {
+	using sl::functor::default_delete;
+}

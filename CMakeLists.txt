@@ -50,6 +50,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"functional/functor/comparison.hpp"
 	"functional/functor/construct_using.hpp"
 	"functional/functor/default_construct.hpp"
+	"functional/functor/default_delete.hpp"
 	"functional/functor/forward_construct.hpp"
 	"functional/functor/generic_stateless.hpp"
 	"functional/functor/identity_index.hpp"
