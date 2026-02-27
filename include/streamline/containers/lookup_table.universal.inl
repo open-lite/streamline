@@ -15,15 +15,15 @@ namespace sl::generic {
 	> 
 	requires (
 		(XfrmSeq::size() == 0 || (
-			traits::is_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, Arg&&> &&
-			traits::is_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, Arg&&>
+			traits::is_invocable_each_r_v<XfrmEachToKeyFn, typename remove_cvref_t<R>::key_type, Arg&&> &&
+			traits::is_invocable_each_r_v<XfrmEachToValueFn, typename remove_cvref_t<R>::mapped_type, Arg&&>
 		)) &&
 		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
 	)
 	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachToKeyFn&& xfrm_each_to_key_fn = {}, XfrmEachToValueFn&& xfrm_each_to_value_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>) 
 	noexcept(XfrmSeq::size() == 0 || (
-		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::key_type, XfrmEachToKeyFn, Arg&&> &&
-		traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::mapped_type, XfrmEachToValueFn, Arg&&>
+		traits::is_noexcept_invocable_each_r_v<XfrmEachToKeyFn&&, typename remove_cvref_t<R>::key_type, Arg&&> &&
+		traits::is_noexcept_invocable_each_r_v<XfrmEachToValueFn&&, typename remove_cvref_t<R>::mapped_type, Arg&&>
 	)) {
 		return impl::make_lookup_table_from_container<remove_cvref_t<R>>(forward<Arg>(array_ish), forward<XfrmEachToKeyFn>(xfrm_each_to_key_fn), forward<XfrmEachToValueFn>(xfrm_each_to_value_fn), xfrm_seq);
 	}

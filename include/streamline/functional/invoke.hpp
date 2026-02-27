@@ -15,9 +15,9 @@ namespace sl {
 
 
 	template<typename R, typename Fn, typename... Args>
-	requires traits::is_invocable_r_v<R, Fn, Args...>
+	requires traits::is_invocable_r_v<Fn, R, Args...>
 	constexpr R invoke_r(Fn&& fn, Args&&... args) 
-	noexcept(traits::is_noexcept_invocable_r_v<R, Fn, Args...>) {
+	noexcept(traits::is_noexcept_invocable_r_v<Fn, R, Args...>) {
 		if constexpr (traits::is_same_as_v<void, remove_cv_t<R>>)
 			invoke(sl::forward<Fn>(fn), sl::forward<Args>(args)...);
 		else

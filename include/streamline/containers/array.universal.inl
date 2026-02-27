@@ -27,11 +27,11 @@ namespace sl::generic {
 		typename RawArg = remove_cvref_t<Arg>
 	> 
 	requires (
-		(XfrmSeq::size() == 0 || traits::is_invocable_each_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&>) &&
+		(XfrmSeq::size() == 0 || traits::is_invocable_each_r_v<XfrmEachFn&&, typename remove_cvref_t<R>::value_type, Arg&&>) &&
 		(traits::is_tuple_like_v<RawArg> || traits::is_container_like_v<RawArg>)
 	)
 	constexpr remove_cvref_t<R> make(Arg&& array_ish, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {}, in_place_adl_tag_type<R> = in_place_adl_tag<R>)
-	noexcept(XfrmSeq::size() == 0 || traits::is_noexcept_invocable_each_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&>) {
+	noexcept(XfrmSeq::size() == 0 || traits::is_noexcept_invocable_each_r_v<XfrmEachFn&&, typename remove_cvref_t<R>::value_type, Arg&&>) {
 		return impl::make_array_from_container<remove_cvref_t<R>>(sl::forward<Arg>(array_ish), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 
@@ -43,9 +43,9 @@ namespace sl::generic {
 		typename XfrmEachFn = functor::identity,
 		typename XfrmSeq = index_sequence_of_length_type<algo::min(tuple_traits<R>::size, N)>
 	>
-	requires traits::is_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&, index_constant_type<0>>
+	requires traits::is_invocable_r_v<XfrmEachFn&&, typename remove_cvref_t<R>::value_type, Arg&&, index_constant_type<0>>
 	constexpr remove_cvref_t<R> make(Arg&& value, in_place_repeat_tag_type<N>, XfrmEachFn&& xfrm_each_fn = {}, XfrmSeq xfrm_seq = {})
-	noexcept(traits::is_noexcept_invocable_r_v<typename remove_cvref_t<R>::value_type, XfrmEachFn&&, Arg&&, index_constant_type<0>>) {
+	noexcept(traits::is_noexcept_invocable_r_v<XfrmEachFn&&, typename remove_cvref_t<R>::value_type, Arg&&, index_constant_type<0>>) {
 		return impl::make_array_from_value<remove_cvref_t<R>>(sl::forward<Arg>(value), sl::forward<XfrmEachFn>(xfrm_each_fn), xfrm_seq);
 	}
 }
