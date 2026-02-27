@@ -3,7 +3,9 @@
 #include "streamline/numeric/int.hpp"
 #include "streamline/memory/align_value.hpp"
 
-
+#if !defined(_NEW) && !defined(_LIBCPP_NEW)
+#define _NEW
+#define _LIPCPP_NEW
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunknown-attributes"
 
@@ -25,3 +27,4 @@
 }
 
 #pragma GCC diagnostic pop
+#endif

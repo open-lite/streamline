@@ -9,7 +9,9 @@ namespace sl {
 	inline constexpr destroying_delete_tag_type destroying_delete_tag{};
 }
 
-
+#if !defined(_NEW) && !defined(_LIBCPP_NEW)
+#define _NEW
+#define _LIPCPP_NEW
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunknown-attributes"
 
@@ -34,3 +36,4 @@ namespace sl {
 }
 
 #pragma GCC diagnostic pop
+#endif
