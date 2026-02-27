@@ -67,6 +67,10 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"memory/new_handler.hpp"
 	"memory/new.hpp"
 	"memory/start_lifetime_as.hpp"
+	"memory/unique_ptr.fwd.hpp"
+	"memory/unique_ptr.hpp"
+	"memory/unique_ptr.inl"
+	"memory/unique_ptr.universal.inl"
 
 
 	"metaprogramming/impl/compounded_categories.hpp"

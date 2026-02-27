@@ -177,8 +177,8 @@
 //#undef  __cpp_lib_constexpr_map
 //#define __cpp_lib_constexpr_map 202502L
 
-//#undef  __cpp_lib_constexpr_memory
-//#define __cpp_lib_constexpr_memory 202202L
+#undef  __cpp_lib_constexpr_memory
+#define __cpp_lib_constexpr_memory 202202L
 
 #undef  __cpp_lib_constexpr_new
 #define __cpp_lib_constexpr_new 202406L
