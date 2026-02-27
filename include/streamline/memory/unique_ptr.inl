@@ -59,6 +59,13 @@ namespace sl::generic {
 		)
 	) :
 		ptr{other.release()}, deleter(::sl::forward<E>(other.deleter)) {}
+
+
+	template<typename T, traits::noexcept_invocable_r<void, T*> DeleterT>
+	constexpr unique_ptr<T, DeleterT>::unique_ptr(unique_ptr&& other)
+	noexcept(sl::traits::is_noexcept_move_constructible_v<DeleterT>)
+	requires(sl::traits::is_move_constructible_v<DeleterT>) 
+		: ptr{other.release()}, deleter(::sl::forward<DeleterT>(other.deleter)) {}
 }
 
 namespace sl::generic {
@@ -94,6 +101,15 @@ namespace sl::generic {
 	) {
 		reset(other.release());
 		deleter = ::sl::forward<E>(other.deleter);
+		return *this;
+	}
+
+	template<typename T, traits::noexcept_invocable_r<void, T*> DeleterT>
+	constexpr unique_ptr<T, DeleterT>& unique_ptr<T, DeleterT>::operator=(unique_ptr&& other)
+	noexcept(sl::traits::is_noexcept_move_constructible_v<DeleterT>)
+	requires(sl::traits::is_move_constructible_v<DeleterT>) {
+		reset(other.release());
+		deleter = ::sl::forward<DeleterT>(other.deleter);
 		return *this;
 	}
 }

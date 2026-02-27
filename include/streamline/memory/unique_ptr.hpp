@@ -53,6 +53,11 @@ namespace sl::generic {
 			)
 		);
 
+		constexpr unique_ptr(unique_ptr&& other)
+		noexcept(sl::traits::is_noexcept_move_constructible_v<DeleterT>)
+		requires(sl::traits::is_move_constructible_v<DeleterT>);
+
+
 		constexpr unique_ptr(unique_ptr const&) noexcept = delete;
 
 	public:
@@ -76,6 +81,10 @@ namespace sl::generic {
 			)
 		);
 		
+		constexpr unique_ptr& operator=(unique_ptr&&)
+		noexcept(sl::traits::is_noexcept_move_constructible_v<DeleterT>)
+		requires(sl::traits::is_move_constructible_v<DeleterT>);
+
 		constexpr unique_ptr& operator=(unique_ptr const&) noexcept = delete;
 
 	public:
