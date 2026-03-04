@@ -25,6 +25,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/array.hpp"
 	"containers/array.inl"
 	"containers/array.universal.inl"
+	"containers/generic_container_template_args.def.hpp"
 	"containers/initializer_list.hpp"
 	"containers/initializer_list.inl"
 	"containers/lookup_table.fwd.hpp"
@@ -37,7 +38,8 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"containers/tuple.fwd.hpp"
 	"containers/tuple.hpp"
 	"containers/tuple.inl"
-	"containers/generic_container_template_args.def.hpp"
+	"containers/version.fwd.hpp"
+	"containers/version.hpp"
 
 
 	"diagnostics/abort.hpp"

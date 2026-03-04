@@ -11,8 +11,12 @@
 //compund arithmetic categories
 namespace sl::traits {
 	template<typename T> struct is_integral : bool_constant_type<is_integer<T>::value || is_character<T>::value || is_same_as<T, bool>::value> {};
+	template<typename T> struct is_signed_integral : impl::is_signed<T, is_integral<T>::value>::type {};
+	template<typename T> struct is_unsigned_integral : impl::is_unsigned<T, is_integral<T>::value>::type {};
 	//TODO: replace with incrementable
 	template<typename T> struct is_integral_like : bool_constant_type<is_integral<T>::value || is_enumeration<T>::value> {};
+	template<typename T> struct is_signed_integral_like : impl::is_signed<T, is_integral_like<T>::value>::type {};
+	template<typename T> struct is_unsigned_integral_like : impl::is_unsigned<T, is_integral_like<T>::value>::type {};
 
 	template<typename T> struct is_arithmetic : bool_constant_type<is_integral<T>::value || is_floating_point<T>::value> {};
 	template<typename T> struct is_signed_arithmetic : impl::is_signed<T, is_arithmetic<T>::value>::type {};
@@ -63,7 +67,16 @@ namespace sl::traits {
 	template<typename T>
 	constexpr static bool is_integral_v = is_integral<T>::value;
 	template<typename T>
+	constexpr static bool is_signed_integral_v = is_signed_integral<T>::value;
+	template<typename T>
+	constexpr static bool is_unsigned_integral_v = is_unsigned_integral<T>::value;
+
+	template<typename T>
 	constexpr static bool is_integral_like_v = is_integral_like<T>::value;
+	template<typename T>
+	constexpr static bool is_signed_integral_like_v = is_signed_integral_like<T>::value;
+	template<typename T>
+	constexpr static bool is_unsigned_integral_like_v = is_unsigned_integral_like<T>::value;
 
 	template<typename T>
 	constexpr static bool is_arithmetic_v = is_arithmetic<T>::value;
@@ -95,9 +108,18 @@ namespace sl::traits {
 //concepts
 namespace sl::traits {
 	template<typename T>
-	concept integral = is_integral_v<T>;
+	concept integral = is_integral<T>::value;
 	template<typename T>
-	concept integral_like = is_integral_like_v<T>;
+	concept signed_integral = is_signed_integral<T>::value;
+	template<typename T>
+	concept unsigned_integral = is_unsigned_integral<T>::value;
+
+	template<typename T>
+	concept integral_like = is_integral_like<T>::value;
+	template<typename T>
+	concept signed_integral_like = is_signed_integral_like<T>::value;
+	template<typename T>
+	concept unsigned_integral_like = is_unsigned_integral_like<T>::value;
 
 	template<typename T>
 	concept arithmetic = is_arithmetic_v<T>;
