@@ -2,6 +2,8 @@
 
 
 #if !defined(_INITIALIZER_LIST) && !defined(_LIBCPP_INITIALIZER_LIST)
+#define _INITIALIZER_LIST
+#define _LIBCPP_INITIALIZER_LIST
 
 #include "streamline/numeric/int.hpp"
 
