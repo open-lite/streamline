@@ -10,7 +10,7 @@
 namespace sl::functor {
 	template<typename R, auto Func>
 	struct invoke_each_result {
-		template<typename T, sl::index_t... Is, typename... Args>
+		template<typename T, T... Is, typename... Args>
 		constexpr R operator()(sl::integer_sequence_type<T, Is...>, Args&&... args) const noexcept {
 			using lambda_type = sl::invoke_return_type_t<decltype(Func), Args&&..., sl::constant_type<T, 0>>(*)(Args&&...) noexcept;
 			constexpr sl::array<sizeof...(Is), lambda_type> funcs{{
