@@ -71,6 +71,9 @@ namespace sl::generic {
 	template <size_t N, typename Key, typename Value, typename Hash, typename KeyEqual>
 	template<typename K> 
 	constexpr auto lookup_table<sl::size_constant_type<N>, Key, Value, Hash, KeyEqual>::find(this auto&& self, K&& key) noexcept requires compatible_key<K> {
+		if constexpr(N == 0)
+			return forward_as_lvalue<decltype(self)>(self).end();
+
 		const index_t pos = self.lookup(key);
 		auto it = forward_as_lvalue<decltype(self)>(self).begin() + pos;
 
