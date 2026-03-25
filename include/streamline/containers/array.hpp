@@ -57,21 +57,26 @@ namespace sl::generic {
 		constexpr auto&& front(this auto&& self) noexcept;
 		constexpr auto&&  back(this auto&& self) noexcept;
 
-		constexpr auto data(this auto&& self) noexcept;
+		constexpr       pointer_type data(this auto      & self) noexcept;
+		constexpr const_pointer_type data(this auto const& self) noexcept;
 
 	//Iterators
 	public:
-		constexpr auto begin(this auto&& self) noexcept;
+		constexpr       iterator_type  begin(this auto      & self) noexcept;
+		constexpr const_iterator_type  begin(this auto const& self) noexcept;
 		constexpr const_iterator_type cbegin(this auto const& self) noexcept;
 
-		constexpr auto end(this auto&& self) noexcept;
+		constexpr       iterator_type  end(this auto      & self) noexcept;
+		constexpr const_iterator_type  end(this auto const& self) noexcept;
 		constexpr const_iterator_type cend(this auto const& self) noexcept;
 
 
-		constexpr auto rbegin(this auto&& self) noexcept;
+		constexpr       reverse_iterator_type  rbegin(this auto      & self) noexcept;
+		constexpr const_reverse_iterator_type  rbegin(this auto const& self) noexcept;
 		constexpr const_reverse_iterator_type crbegin(this auto const& self) noexcept;
 
-		constexpr auto rend(this auto&& self) noexcept;
+		constexpr       reverse_iterator_type  rend(this auto      & self) noexcept;
+		constexpr const_reverse_iterator_type  rend(this auto const& self) noexcept;
 		constexpr const_reverse_iterator_type crend(this auto const& self) noexcept;
 
 	//Capacity

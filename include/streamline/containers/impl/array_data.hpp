@@ -14,7 +14,10 @@ namespace sl::impl {
 	template<typename T>
 	struct array_data<0, T> {
 		struct type {
-			consteval operator T*() const noexcept { return nullptr; }
+			consteval operator T               *()                noexcept { return nullptr; }
+			consteval operator T const         *() const          noexcept { return nullptr; }
+			consteval operator T       volatile*()       volatile noexcept { return nullptr; }
+			consteval operator T const volatile*() const volatile noexcept { return nullptr; }
 		};
 	};
 }

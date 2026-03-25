@@ -96,7 +96,8 @@ namespace sl::generic {
 		template<auto I> constexpr auto&& get(this auto&& self) noexcept requires compatible_key<decltype(I)>;
 
 		template<typename K> constexpr size_t count(K&& key) const noexcept requires compatible_key<K>;
-		template<typename K> constexpr auto find(this auto&& self, K&& key) noexcept requires compatible_key<K>;
+		template<typename K> constexpr       iterator_type find(K&& key)      & noexcept requires compatible_key<K>;
+		template<typename K> constexpr const_iterator_type find(K&& key) const& noexcept requires compatible_key<K>;
 		template<typename K> constexpr bool contains(K&& key) const noexcept requires compatible_key<K>;
 
 		template<typename K> constexpr auto equal_range(this auto&& self, K&& key) noexcept requires compatible_key<K>;

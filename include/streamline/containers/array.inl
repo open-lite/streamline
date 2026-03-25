@@ -7,47 +7,57 @@
 //Element access
 namespace sl::generic {
 	template<size_t N, typename T>
-	constexpr auto&& array<sl::size_constant_type<N>, T>::at(this auto&& self, array::index_type pos) noexcept {
+	constexpr auto&& array<sl::size_constant_type<N>, T>::at(this auto&& self, index_type pos) noexcept {
 		if(pos >= N) sl::terminate();
-		return sl::forward<decltype(self)>(self)._data[pos];
+		return sl::forward_like<decltype(self)>(self._data[pos]);
 	}
 	
 	template<size_t N, typename T>
 	constexpr auto&& array<sl::size_constant_type<N>, T>::operator[](this auto&& self, index_type pos) noexcept {
-		return sl::forward<decltype(self)>(self)._data[pos];
+		return sl::forward_like<decltype(self)>(self._data[pos]);
 	}
 	
 	
 	template<size_t N, typename T>
 	template<index_t I>
 	constexpr auto&& array<sl::size_constant_type<N>, T>::get(this auto&& self) noexcept {
-		return sl::forward<decltype(self)>(self)._data[I];
+		return sl::forward_like<decltype(self)>(self._data[I]);
 	}
 
 
 	
 	template<size_t N, typename T>
 	constexpr auto&& array<sl::size_constant_type<N>, T>::front(this auto&& self) noexcept {
-		return sl::forward<decltype(self)>(self)._data[0];
+		return sl::forward_like<decltype(self)>(self._data[0]);
 	}
 	
 	template<size_t N, typename T>
 	constexpr auto&& array<sl::size_constant_type<N>, T>::back(this auto&& self) noexcept {
-		return sl::forward<decltype(self)>(self)._data[N - 1];
+		return sl::forward_like<decltype(self)>(self._data[N - 1]);
 	}
 
 
 	template<size_t N, typename T>
-	constexpr auto array<sl::size_constant_type<N>, T>::data(this auto&& self) noexcept {
-		return sl::forward_as_lvalue<decltype(self)>(self)._data;
+	constexpr array<sl::size_constant_type<N>, T>::pointer_type array<sl::size_constant_type<N>, T>::data(this auto& self) noexcept {
+		return self._data;
+	}
+
+	template<size_t N, typename T>
+	constexpr array<sl::size_constant_type<N>, T>::const_pointer_type array<sl::size_constant_type<N>, T>::data(this auto const& self) noexcept {
+		return self._data;
 	}
 }
 
 //Iterators
 namespace sl::generic {
 	template<size_t N, typename T>
-	constexpr auto array<sl::size_constant_type<N>, T>::begin(this auto&& self) noexcept {
-		return sl::forward_as_lvalue<decltype(self)>(self)._data;
+	constexpr array<sl::size_constant_type<N>, T>::iterator_type array<sl::size_constant_type<N>, T>::begin(this auto& self) noexcept {
+		return self._data;
+	}
+
+	template<size_t N, typename T>
+	constexpr array<sl::size_constant_type<N>, T>::const_iterator_type array<sl::size_constant_type<N>, T>::begin(this auto const& self) noexcept {
+		return self._data;
 	}
 
 	
@@ -58,13 +68,19 @@ namespace sl::generic {
 
 	
 	template<size_t N, typename T>
-	constexpr auto array<sl::size_constant_type<N>, T>::end(this auto&& self) noexcept {
-		return sl::forward_as_lvalue<decltype(self)>(self)._data + N;
+	constexpr array<sl::size_constant_type<N>, T>::iterator_type array<sl::size_constant_type<N>, T>::end(this auto& self) noexcept {
+		return self.begin() + N;
 	}
 
 	template<size_t N, typename T>
+	constexpr array<sl::size_constant_type<N>, T>::const_iterator_type array<sl::size_constant_type<N>, T>::end(this auto const& self) noexcept {
+		return self.begin() + N;
+	}
+
+
+	template<size_t N, typename T>
 	constexpr array<sl::size_constant_type<N>, T>::const_iterator_type array<sl::size_constant_type<N>, T>::cend(this auto const& self) noexcept {
-		return self._data + N;
+		return self.cbegin() + N;
 	}
 
 
