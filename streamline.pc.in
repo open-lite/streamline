@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib
+
+Name: streamline
+Description: 
+URL: https://github.com/open-lite/streamline
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -lstreamline
+Cflags: -I${includedir}

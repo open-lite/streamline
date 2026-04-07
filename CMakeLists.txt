@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(streamline VERSION 1.0 LANGUAGES CXX)
+project(streamline VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "ON")
 option(BUILD_SHARED_LIBS "" ON)
@@ -175,7 +175,11 @@ file(TO_NATIVE_PATH "${SELF_INC_STD_CMAKE_DIR}" SELF_INC_STD_DIR)
 target_include_directories(${PROJECT_NAME} SYSTEM AFTER ${LIBRARY_TYPE} "${SELF_INC_STD_DIR}")
 message(STATUS "Including self std directory: ${SELF_INC_STD_DIR}")
 
-
+## pkgconfig
+configure_file(
+	"streamline.pc.in"
+    "streamline.pc"
+@ONLY)
 
 
 ### test executables ###
@@ -184,3 +188,4 @@ message(STATUS "Including self std directory: ${SELF_INC_STD_DIR}")
 ### install ###
 install(TARGETS ${PROJECT_NAME} FILE_SET ${PROJECT_NAME}_HEADERS)
 install(TARGETS ${PROJECT_NAME} FILE_SET ${PROJECT_NAME}_STD_HEADERS)
+install(FILES ${PROJECT_BINARY_DIR}/streamline.pc DESTINATION lib/pkgconfig/)
