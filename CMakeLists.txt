@@ -62,6 +62,9 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"functional/functor/subscript.hpp"
 	"functional/invoke.hpp"
 
+	"memory/impl/deleter_wrapper.hpp"
+	"memory/impl/unique_ptr_base.hpp"
+	"memory/impl/unique_ptr_base.inl"
 
 	"memory/align_value.hpp"
 	"memory/delete.hpp"

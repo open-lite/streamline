@@ -12,6 +12,9 @@ namespace sl::generic {
 }
 
 namespace sl {
-	template<typename T, sl::traits::noexcept_invocable_r<void, T*> DeleterT = sl::functor::default_delete<T>>
+	template<typename T, sl::traits::noexcept_invocable_r<void, sl::remove_extent_t<T>*> DeleterT = sl::functor::default_delete<T>>
 	using unique_ptr = generic::unique_ptr<T, DeleterT>;
+
+	template<typename T>
+	using virtual_unique_ptr = generic::unique_ptr<T, void>;
 }

@@ -14,11 +14,11 @@ namespace sl {
 	}
 
 	template<
-		traits::specialization_of<generic::unique_ptr> R,
-		typename... Args
+		traits::specialization_of<generic::unique_ptr> R
 	> 
-	requires(traits::is_constructible_from_v<typename remove_cvref_t<R>::value_type, Args&&...>)
 	constexpr remove_cvref_t<R> make_default(in_place_tag_type) {
 		return remove_cvref_t<R>(new typename remove_cvref_t<R>::element_type);
 	}
+	
+	//TODO: make for array specialiation
 }
