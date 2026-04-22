@@ -54,6 +54,7 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"functional/functor/default_construct.hpp"
 	"functional/functor/default_delete.hpp"
 	"functional/functor/forward_construct.hpp"
+	"functional/functor/generic_stateful.hpp"
 	"functional/functor/generic_stateless.hpp"
 	"functional/functor/identity_index.hpp"
 	"functional/functor/identity.hpp"
