@@ -71,6 +71,8 @@ set(${PROJECT_NAME}_HEADER_FILES
 	"memory/launder.hpp"
 	"memory/new_handler.hpp"
 	"memory/new.hpp"
+	"memory/reference_ptr.fwd.hpp"
+	"memory/reference_ptr.hpp"
 	"memory/start_lifetime_as.hpp"
 	"memory/unique_ptr.fwd.hpp"
 	"memory/unique_ptr.hpp"
